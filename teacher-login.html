@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Login | Student Archive Management System</title>
+
+<link rel="stylesheet" href="teacher-login.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <img src="images/logo.png" class="logo">
+
+    <h2>Student's Archive Management System</h2>
+
+    <p class="school">
+        Young Achievers' School of Caloocan, Inc.
+    </p>
+
+    <p class="subtitle">
+        Teacher's Portal
+    </p>
+
+    <div class="input-box">
+
+        <i class="fa-solid fa-envelope"></i>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Email Address">
+
+    </div>
+
+    <div class="input-box">
+
+        <i class="fa-solid fa-lock"></i>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Password">
+
+        <i class="fa-solid fa-eye eye" id="togglePassword"></i>
+
+    </div>
+
+    <button id="loginBtn">
+
+        <i class="fa-solid fa-right-to-bracket"></i>
+
+        Sign In
+
+    </button>
+
+    <a href="index.html" class="back">
+
+         Return to Home
+
+    </a>
+
+</div>
+
+<script>
+
+const toggle = document.getElementById("togglePassword");
+
+const password = document.getElementById("password");
+
+toggle.addEventListener("click",()=>{
+
+    if(password.type==="password"){
+
+        password.type="text";
+
+        toggle.classList.replace("fa-eye","fa-eye-slash");
+
+    }else{
+
+        password.type="password";
+
+        toggle.classList.replace("fa-eye-slash","fa-eye");
+
+    }
+
+});
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="module" src="auth.js"></script>
+
+</body>
+</html>

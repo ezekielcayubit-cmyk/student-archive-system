@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Research Folder</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar" id="sidebar">
+
+    <img src="images/logo.png" class="logo">
+
+<h2 class="school-title">YASCI</h2>
+
+<hr class="sidebar-line">
+    
+
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="archive.html" class="active">📂 Archive Files</a>
+    <a href="upload.html">⬆ Upload File</a>
+    <a href="about.html">ℹ About</a>
+    <a href="contact.html">📞 Contact</a>
+
+</div>
+
+<div class="main">
+
+<div class="upload-box">
+
+<h2 id="folderTitle">Research Folder</h2>
+
+<p id="folderSubtitle">
+Loading...
+</p>
+
+<br>
+
+<a href="archive.html">
+<button>⬅ Back to Archive</button>
+</a>
+
+</div>
+
+<br>
+
+<input
+type="text"
+id="search"
+class="search"
+placeholder="🔍 Search research...">
+
+<br><br>
+<div id="folderBody" class="researchCards">
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="folder.js"></script>
+
+<script>
+
+const params=new URLSearchParams(window.location.search);
+
+const strand=params.get("strand");
+
+document.getElementById("folderTitle").innerHTML=strand+" Research Folder";
+
+document.getElementById("folderSubtitle").innerHTML="Showing all research papers under "+strand;
+
+async function loadFolder(){
+
+const tbody=document.getElementById("folderBody");
+
+tbody.innerHTML="";
+
+const snapshot=await db.collection("research")
+.where("strand","==",strand)
+.get();
+
+snapshot.forEach(doc=>{
+
+const data=doc.data();
+
+tbody.innerHTML += `
+<div class="research-card">
+
+    <h3>${data.title}</h3>
+
+    <p><strong>Research No.</strong> ${data.number}</p>
+
+    <p><strong>Researcher:</strong> ${data.researcher}</p>
+
+    <p><strong>Adviser:</strong> ${data.adviser}</p>
+
+    <p><strong>School Year:</strong> ${data.schoolYear}</p>
+
+    <div class="card-buttons">
+        <button onclick="window.open('${data.fileURL}','_blank')">
+            👁 View
+        </button>
+
+        <a href="${data.fileURL}" target="_blank">
+            <button>
+                ⬇ Download
+            </button>
+        </a>
+    </div>
+
+</div>
+`;
+});
+
+}
+
+loadFolder();
+
+</script>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
+
+</body>
+</html>

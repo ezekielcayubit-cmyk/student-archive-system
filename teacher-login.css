@@ -1,0 +1,164 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:100vh;
+
+    background:linear-gradient(135deg,#0b4ea2,#1976d2,#42a5f5);
+
+}
+
+.login-box{
+
+    width:420px;
+
+    background:#fff;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+    text-align:center;
+
+}
+
+.logo{
+
+    width:95px;
+
+    margin-bottom:15px;
+
+}
+
+.login-box h2{
+
+    color:#0d47a1;
+
+    font-size:24px;
+
+}
+
+.school{
+
+    color:#555;
+
+    margin-top:8px;
+
+}
+
+.subtitle{
+
+    color:#1565c0;
+
+    font-weight:bold;
+
+    margin:25px 0;
+
+}
+
+.input-box{
+
+    display:flex;
+
+    align-items:center;
+
+    background:#f5f7fb;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    padding:14px;
+
+    margin-bottom:18px;
+
+}
+
+.input-box i{
+
+    color:#1565c0;
+
+}
+
+.input-box input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    background:none;
+
+    margin-left:10px;
+
+    font-size:15px;
+
+}
+
+.eye{
+
+    cursor:pointer;
+
+}
+
+#loginBtn{
+
+    width:100%;
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    background:#1565c0;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#loginBtn:hover{
+
+    background:#0b4ea2;
+
+}
+
+.back{
+
+    display:block;
+
+    margin-top:20px;
+
+    color:#1565c0;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+}
+
+.back:hover{
+
+    text-decoration:underline;
+
+}

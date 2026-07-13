@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Student Archive Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar" id="sidebar">
+
+    <img src="images/logo.png" class="logo">
+
+<h2 class="school-title">YASCI</h2>
+
+<hr class="sidebar-line">
+    
+
+    <a href="dashboard.html">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+    </a>
+    <a href="archive.html">
+        <i class="fa-solid fa-folder"></i>
+        Archive Files
+    </a>
+    <a href="abstract.html">
+    <i class="fa-solid fa-file-lines"></i>
+    Abstract Archive
+</a>
+    <a href="upload.html" id="uploadMenu">
+        <i class="fa-solid fa-upload"></i>
+        Upload File
+    </a>
+    <a href="about.html" class="active">
+        <i class="fa-solid fa-circle-info"></i>
+        About
+    </a>
+    <a href="contact.html" id="contactMenu">
+        <i class="fa-solid fa-phone"></i>
+        Contact
+    </a>
+   <a href="#" onclick="teacherLogout(); return false;">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Logout
+</a>
+ 
+     <a href="activity-logs.html">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    Activity Logs
+</a>
+
+</div>
+
+<div class="main">
+
+    <div class="header">
+
+        <div class="header-left">
+            <img src="images/logo.png" class="header-logo">
+        </div>
+
+        <div class="header-right">
+
+    <div class="header-top">
+
+        <div>
+
+            <h1>Student's Archive Management System</h1>
+
+            <p>Young Achievers' School of Caloocan, Inc.</p>
+
+            <div class="header-info">
+                <span id="date"></span> |
+                <span id="clock"></span>
+            </div>
+
+        </div>
+
+        <div class="user-card">
+
+            <div class="user-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="user-details">
+
+                <small>Welcome</small>
+
+                <div id="userEmail"></div>
+
+                <div id="userRole"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    
+</div>
+
+
+    <div class="upload-box about-page">
+
+    <div class="about-hero">
+
+        <i class="fa-solid fa-box-archive"></i>
+
+        <h2>Student Archive Management System</h2>
+
+        <p>
+            A web-based archive platform designed for
+            <strong>Young Achievers' School of Caloocan, Inc.</strong>
+            to organize, store, and manage students' research papers in one secure and accessible location.
+        </p>
+
+    </div>
+
+    <h3>What the System Can Do</h3>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+            <i class="fa-solid fa-folder-open"></i>
+            <h4>Archive Research</h4>
+            <p>Store approved research papers in an organized digital archive.</p>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <h4>Quick Search</h4>
+            <p>Find research papers instantly using keywords or titles.</p>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-eye"></i>
+            <h4>View & Download</h4>
+            <p>Open and download research documents anytime.</p>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-book"></i>
+            <h4>Digital Preservation</h4>
+            <p>Keep valuable research outputs organized for future reference.</p>
+        </div>
+
+    </div>
+
+    <h3>Why This System?</h3>
+
+    <div class="benefits">
+
+        <div><i class="fa-solid fa-check"></i> Organized digital archive</div>
+
+        <div><i class="fa-solid fa-check"></i> Faster document retrieval</div>
+
+        <div><i class="fa-solid fa-check"></i> Easy file management</div>
+
+        <div><i class="fa-solid fa-check"></i> Supports teachers and students</div>
+
+        <div><i class="fa-solid fa-check"></i> Preserves research records</div>
+
+    </div>
+
+    <h3>System Information</h3>
+
+    <table class="info-table">
+
+        <tr>
+            <td>System</td>
+            <td>Student Archive Management System</td>
+        </tr>
+
+        <tr>
+            <td>School</td>
+            <td>Young Achievers' School of Caloocan, Inc.</td>
+        </tr>
+
+        <tr>
+            <td>Primary Users</td>
+            <td>Teachers</td>
+        </tr>
+
+        <tr>
+            <td>Version</td>
+            <td>1.0</td>
+        </tr>
+
+        <tr>
+            <td>Technology</td>
+            <td>HTML • CSS • JavaScript • Firebase</td>
+        </tr>
+
+        <tr>
+            <td>School Year</td>
+            <td>2026–2027</td>
+        </tr>
+
+    </table>
+
+</div>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="game.js"></script>
+<script type="module" src="auth.js"></script>
+</body>
+</html>

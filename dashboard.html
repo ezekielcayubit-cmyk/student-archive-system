@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+
+const role = sessionStorage.getItem("role");
+
+if(role !== "teacher"){
+
+    window.location.href="index.html";
+
+}
+
+</script>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Student Archive Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar" id="sidebar">
+
+    <div>
+
+        <div class="sidebar-header">
+
+<img src="images/logo.png" class="logo">
+
+<h2 class="school-title">YASCI</h2>
+
+<hr class="sidebar-line">
+
+            
+        </div>
+
+        
+
+        <a href="dashboard.html" class="active">
+            <i class="fa-solid fa-house"></i>
+             Dashboard
+        </a>
+
+        <a href="archive.html">
+            <i class="fa-solid fa-folder"></i>
+            Archive Files
+        </a>
+        <a href="abstract.html">
+            <i class="fa-solid fa-file-lines"></i>
+             Abstract Archive
+        </a>
+        <a href="upload.html" id="uploadMenu">
+             <i class="fa-solid fa-upload"></i>
+                 Upload File
+         </a>
+
+        <a href="about.html">
+            <i class="fa-solid fa-circle-info"></i>
+             About
+        </a>
+
+       <a href="contact.html" id="contactMenu">
+            <i class="fa-solid fa-phone"></i>
+             Contact
+        </a>
+
+    </div>
+
+       <a href="#" onclick="teacherLogout(); return false;">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Logout
+</a>
+
+<a href="activity-logs.html">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    Activity Logs
+</a>
+
+
+</div>
+<div class="main">
+
+    <div class="header">
+
+        <div class="header-left">
+            <img src="images/logo.png" class="header-logo">
+        </div>
+
+        <div class="header-right">
+
+    <div class="header-top">
+
+        <div>
+
+            <h1>Student's Archive Management System</h1>
+
+            <p>Young Achievers' School of Caloocan, Inc.</p>
+
+            <div class="header-info">
+                <span id="date"></span> |
+                <span id="clock"></span>
+            </div>
+
+        </div>
+
+        <div class="user-card">
+
+            <div class="user-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="user-details">
+
+                <small>Welcome</small>
+
+                <div id="userEmail"></div>
+
+                <div id="userRole"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    
+</div>
+
+<div class="dashboard-welcome">
+
+    <h2>📚 Welcome</h2>
+
+    <p>
+
+        Welcome to the Student Archive Management System.
+
+        This platform serves as the official digital repository
+        for approved Senior High School research papers.
+
+        Teachers can upload, organize, browse,
+        preview, and download research documents efficiently.
+
+    </p>
+
+    <div class="dashboard-buttons">
+
+        <a href="archive.html" class="dashboard-btn">
+            📂 Browse Archive
+        </a>
+
+        <a href="upload.html"
+        class="dashboard-btn"
+         id="uploadButton">
+            ⬆ Upload Research
+        </a>
+
+    </div>
+
+</div>
+
+<div class="feature-grid">
+
+    <div class="feature-card">
+        <i class="fa-solid fa-folder-open"></i>
+        <h3>Archive Files</h3>
+        <p>Browse approved research papers by strand.</p>
+    </div>
+
+    <div class="feature-card">
+        <i class="fa-solid fa-upload"></i>
+        <h3>Upload Research</h3>
+        <p>Upload new research documents with complete information.</p>
+    </div>
+
+    <div class="feature-card">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <h3>Quick Search</h3>
+        <p>Locate research papers instantly.</p>
+    </div>
+
+    <div class="feature-card">
+        <i class="fa-solid fa-file-pdf"></i>
+        <h3>PDF Preview</h3>
+        <p>Preview research before downloading.</p>
+    </div>
+
+</div>
+
+    <br>
+
+    
+    <br>
+
+
+    <footer class="footer">
+        <hr>
+        <div class="footer-inner">
+            <p>
+                Student Archive Management System<br>
+                Young Achievers' School of Caloocan, Inc.<br>
+                School Year 2026–2027
+            </p>
+        </div>
+    </footer>
+
+</div>
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="module" src="game.js"></script>
+<script src="theme.js"></script>
+
+<script type="module" src="auth.js"></script>
+
+<script type="module">
+
+import { auth, onAuthStateChanged } from "./firebase.js";
+
+if(sessionStorage.getItem("role") !== "teacher"){
+
+    window.location.href="teacher-login.html";
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+    if(!user){
+
+        window.location.href="teacher-login.html";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

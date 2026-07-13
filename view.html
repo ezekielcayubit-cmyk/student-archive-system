@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Research | Student Archive Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+
+    <img src="images/logo.png" class="logo">
+
+<h2 class="school-title">YASCI</h2>
+
+<hr class="sidebar-line">
+
+    
+
+    <a href="dashboard.html">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+    </a>
+    <a href="archive.html">
+        <i class="fa-solid fa-folder"></i>
+        Archive Files
+    </a>
+    <a href="upload.html">
+        <i class="fa-solid fa-upload"></i>
+        Upload File
+    </a>
+    <a href="about.html">
+        <i class="fa-solid fa-circle-info"></i>
+        About
+    </a>
+    <a href="contact.html">
+        <i class="fa-solid fa-phone"></i>
+        Contact
+    </a>
+   <a href="#" onclick="teacherLogout(); return false;">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Logout
+</a>
+
+</div>
+
+<div class="main">
+
+    <div class="header">
+
+        <div class="header-left">
+            <img src="images/logo.png" class="header-logo">
+        </div>
+
+        <div class="header-right">
+            <h1>Student Archive Management System</h1>
+            <p>Young Achievers' School of Caloocan, Inc.
+</p>
+
+            <div class="header-info">
+                <span id="date"></span> |
+                <span id="clock"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="upload-box">
+
+        <h2>Research Information</h2>
+
+        <table class="archive-table">
+
+            <tr>
+                <th>Research Number</th>
+                <td>R-2025-001</td>
+            </tr>
+
+            <tr>
+                <th>Research Title</th>
+                <td>Development of an Online Archive System</td>
+            </tr>
+
+            <tr>
+                <th>Researchers</th>
+                <td>Juan Dela Cruz</td>
+            </tr>
+
+            <tr>
+                <th>Research Adviser</th>
+                <td>Mrs. Ana Cruz</td>
+            </tr>
+
+            <tr>
+                <th>Strand</th>
+                <td>ICT</td>
+            </tr>
+
+            <tr>
+                <th>School Year</th>
+                <td>2024–2025</td>
+            </tr>
+
+            <tr>
+                <th>Category</th>
+                <td>Research Paper</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td><span class="approved">Approved</span></td>
+            </tr>
+
+            <tr>
+                <th>Date Archived</th>
+                <td>March 15, 2025</td>
+            </tr>
+
+        </table>
+
+        <br>
+
+        <h3>Abstract</h3>
+
+        <p style="text-align:justify; line-height:1.8;">
+            This study focuses on the development of a Student Archive
+            Management System that allows the school to organize, store,
+            search, and retrieve research papers digitally. The system aims
+            to improve document management while preserving academic research
+            for future students and faculty members.
+        </p>
+
+        <br>
+
+        <h3>Keywords</h3>
+
+        <p>
+            Archive System, Research Management, Information System,
+            HTML, CSS, JavaScript
+        </p>
+
+        <br>
+
+        <a href="files/Research1.pdf" target="_blank">
+            <button>📄 Open PDF</button>
+        </a>
+
+        <a href="files/Research1.pdf" download>
+            <button>⬇ Download PDF</button>
+        </a>
+
+        <a href="archive.html">
+            <button>⬅ Back to Archive</button>
+        </a>
+
+    </div>
+
+    <footer class="footer">
+        <hr>
+        <div class="footer-inner">
+            <p>
+                Student Archive Management System<br>
+                Young Achievers' School of Caloocan, Inc.<br>
+                School Year 2026–2027
+            </p>
+        </div>
+    </footer>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="game.js"></script>
+
+</body>
+</html>

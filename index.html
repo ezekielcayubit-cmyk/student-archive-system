@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Student Archive Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loader">
+
+    <img src="images/logo.png" class="loader-logo" alt="YASCI Logo">
+
+    <h2>Student Archive Management System</h2>
+
+    <p>Young Achievers' School of Caloocan, Inc.</p>
+
+    <div class="loading-bar">
+        <div class="loading-progress"></div>
+    </div>
+
+    <p>Loading...</p>
+
+</div>
+
+<div class="landing-page">
+
+    <div class="landing-card">
+
+        <img src="images/logo.png" class="landing-logo">
+
+        <h1>Student Archive Management System</h1>
+
+        <p class="landing-school">
+            Young Achievers' School of Caloocan, Inc.
+        </p>
+
+        <div class="landing-buttons">
+
+            <button
+                onclick="window.location.href='teacher-login.html'"
+                class="teacher-btn">
+
+                <i class="fa-solid fa-user-tie"></i>
+
+                Teacher's Login
+
+            </button>
+
+            <div class="divider">
+
+                <span>OR</span>
+
+            </div>
+
+            <button
+                onclick="studentMode()"
+                class="student-btn">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                Continue as Student
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <hr>
+        <div class="footer-inner">
+            <p>
+                Student Archive Management System<br>
+                Young Achievers' School of Caloocan, Inc.<br>
+                School Year 2026–2027
+            </p>
+        </div>
+    </footer>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="game.js"></script>
+<script src="theme.js"></script>
+
+<script>
+function studentMode(){
+
+    sessionStorage.setItem("role","student");
+
+    window.location.href="archive.html";
+
+}
+</script>
+
+</body>
+</html>

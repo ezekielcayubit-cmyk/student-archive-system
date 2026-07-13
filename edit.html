@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <script>
+
+const role = sessionStorage.getItem("role");
+
+if(role !== "teacher"){
+
+    window.location.href="index.html";
+
+}
+
+</script>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Research</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="main">
+
+<div class="upload-box">
+
+<h2>✏ Edit Research</h2>
+
+<input type="text" id="title" placeholder="Research Title">
+
+<input type="text" id="number" placeholder="Research Number" readonly>
+
+<input type="text" id="researcher" placeholder="Researchers">
+
+<input type="text" id="adviser" placeholder="Adviser">
+
+<input type="text" id="schoolYear" placeholder="School Year">
+
+<select id="strand">
+
+<option>ICT</option>
+<option>STEM</option>
+<option>ABM</option>
+<option>HUMSS</option>
+<option>TVL</option>
+
+</select>
+
+<select id="category">
+
+<option>Research Paper</option>
+<option>Capstone Project</option>
+<option>Feasibility Study</option>
+<option>Action Research</option>
+
+</select>
+
+<br><br>
+
+<button id="saveEdit">
+
+💾 Save Changes
+
+</button>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="edit.js"></script>
+
+</body>
+
+</html>

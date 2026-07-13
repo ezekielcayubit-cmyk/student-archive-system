@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Research Archive | Student Archive Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar" id="sidebar">
+    <img src="images/logo.png" class="logo">
+
+<h2 class="school-title">YASCI</h2>
+
+<hr class="sidebar-line">
+
+    
+    <a href="dashboard.html">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+    </a>
+    <a href="archive.html" class="active">
+        <i class="fa-solid fa-folder"></i>
+        Archive Files
+    </a>
+    <a href="abstract.html">
+    <i class="fa-solid fa-file-lines"></i>
+    Abstract Archive
+</a>
+    <a href="upload.html" id="uploadMenu">
+        <i class="fa-solid fa-upload"></i>
+        Upload File
+    </a>
+    <a href="about.html">
+        <i class="fa-solid fa-circle-info"></i>
+        About
+    </a>
+
+   <a href="contact.html" id="contactMenu">
+        <i class="fa-solid fa-phone"></i>
+        Contact
+    </a>
+   <a href="#" onclick="teacherLogout(); return false;">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Logout
+</a>
+
+    <a href="activity-logs.html">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    Activity Logs
+</a>
+
+</div>
+
+<div class="main">
+
+    <div class="header">
+
+        <div class="header-left">
+            <img src="images/logo.png" class="header-logo">
+        </div>
+
+        <div class="header-right">
+
+    <div class="header-top">
+
+        <div>
+
+            <h1>Student's Archive Management System</h1>
+
+            <p>Young Achievers' School of Caloocan, Inc.</p>
+
+            <div class="header-info">
+                <span id="date"></span> |
+                <span id="clock"></span>
+            </div>
+
+        </div>
+
+        <div class="user-card">
+
+            <div class="user-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="user-details">
+
+                <small>Welcome</small>
+
+                <div id="userEmail"></div>
+
+                <div id="userRole"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    
+</div>
+
+
+    <div class="archive-layout">
+
+        <div class="archive-left">
+
+            <div class="panel-title">
+
+                <h2>📁 Research Folders</h2>
+
+                <input
+                    type="text"
+                    id="folderSearch"
+                    class="search"
+                    placeholder="Search Strand...">
+
+            </div>
+
+            <div id="folderContainer" class="archiveFolders">
+
+                <div class="folder-card" onclick="loadFolder('ICT')">
+
+                    <div class="folder-icon">
+
+                        <img src="images/folder.jpg">
+
+                    </div>
+
+                    <div class="folder-info">
+
+                        <h3>ICT</h3>
+
+                        <p>Information and Communications Technology</p>
+
+                        <span id="ictCount">0 Research Papers</span>
+
+                    </div>
+
+                </div>
+
+               <div class="folder-card" onclick="loadFolder('STEM')">
+
+                    <div class="folder-icon">
+
+                        <img src="images/folder.jpg">
+
+                    </div>
+
+                    <div class="folder-info">
+
+                        <h3>STEM</h3>
+
+                        <p>Science, Technology, Engineering and Mathematics</p>
+
+                        <span id="stemCount">0 Research Papers</span>
+
+                    </div>
+
+                </div>
+
+                <div class="folder-card" onclick="loadFolder('ABM')">
+
+                    <div class="folder-icon">
+
+                        <img src="images/folder.jpg">
+
+                    </div>
+
+                    <div class="folder-info">
+
+                        <h3>ABM</h3>
+
+                        <p>Accountancy, Business and Management</p>
+
+                        <span id="abmCount">0 Research Papers</span>
+
+                    </div>
+
+                </div>
+
+                <div class="folder-card" onclick="loadFolder('HUMSS')">
+
+                    <div class="folder-icon">
+
+                        <img src="images/folder.jpg">
+
+                    </div>
+
+                    <div class="folder-info">
+
+                        <h3>HUMSS</h3>
+
+                        <p>Humanities and Social Sciences</p>
+
+                        <span id="humssCount">0 Research Papers</span>
+
+                    </div>
+
+                </div>
+
+              <div class="folder-card" onclick="loadFolder('HE')">
+
+             <div class="folder-icon">
+            <img src="images/folder.jpg">
+         
+        </div>
+           <div class="folder-info">
+           <h3>HE</h3>
+           <p>Home Economics</p>
+            <span id="heCount">0 Research Papers</span>
+         </div>
+    </div>
+
+          <div class="folder-card" onclick="loadFolder('GAS')">
+
+    <div class="folder-icon">
+        <img src="images/folder.jpg">
+    </div>
+
+    <div class="folder-info">
+
+        <h3>GAS</h3>
+
+        <p>General Academic Strand</p>
+
+        <span id="gasCount">0 Research Papers</span>
+
+    </div>
+
+</div>
+
+ </div>
+     </div>
+
+        <div class="archive-right">
+            
+<div class="research-header">
+
+    <div class="header-text">
+
+        <h2 id="researchTitle"> Research Archive</h2>
+
+        <p>
+            Browse, preview, and download approved research papers.
+        </p>
+
+    </div>
+
+    <div class="research-toolbar">
+
+        <select id="sortResearch">
+            <option value="">Sort By</option>
+            <option value="az">Title (A-Z)</option>
+            <option value="za">Title (Z-A)</option>
+            <option value="new">Newest School Year</option>
+            <option value="old">Oldest School Year</option>
+        </select>
+
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option>Research Paper</option>
+            <option>Capstone Project</option>
+            <option>Feasibility Study</option>
+            <option>Action Research</option>
+        </select>
+
+        <input
+            type="text"
+            id="researchSearch"
+            class="search"
+            placeholder="🔍 Search research...">
+
+        <button id="exportExcel" class="export-btn">
+    <i class="fa-solid fa-file-excel"></i>
+    Export Excel
+</button>
+
+    </div>
+
+</div>
+
+        
+        <div class="research-stats">
+
+    <div class="stat-card">
+        <h2 id="totalResearchFolder">0</h2>
+        <p>Research Papers</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="totalResearchersFolder">0</h2>
+        <p>Researchers</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="totalAdvisersFolder">0</h2>
+        <p>Advisers</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="latestYearFolder">-</h2>
+        <p>Latest School Year</p>
+    </div>
+
+</div>
+
+       <div id="researchList" class="research-list">
+
+    <div class="welcome-library">
+
+        <img src="images/logo.png" class="library-logo">
+
+        <h2>📚 Research Archive</h2>
+
+        <p>
+            Welcome to the Student Archive Management System.
+            Browse approved research papers by selecting a strand folder.
+        </p>
+
+        <div class="library-features">
+
+            <div class="feature">
+                📂 Organized by Strand
+            </div>
+
+            <div class="feature">
+                🔍 Fast Search
+            </div>
+
+            <div class="feature">
+                👁 PDF Preview
+            </div>
+
+            <div class="feature">
+                ⬇ Download Research
+            </div>
+
+        </div>
+
+        <div class="library-message">
+
+            Click any folder on the left to start browsing research papers.
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="paginationControls" class="pagination"></div>
+
+            
+                <div class="archive-note">
+
+                    <strong>Tip:</strong>
+
+                    Click any folder to view all research papers,
+                    preview documents, and download files.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+    <footer class="footer">
+        <hr>
+        <div class="footer-inner">
+            <p>
+                Student Archive Management System<br>
+                Young Achievers' School of Caloocan, Inc.<br>
+                School Year 2026–2027
+            </p>
+        </div>
+    </footer>
+
+    <button id="scrollTopBtn">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" 
+></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="game.js"></script>
+<script src="theme.js"></script>
+
+
+</body>
+</html>

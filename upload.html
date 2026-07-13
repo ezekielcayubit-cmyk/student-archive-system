@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+
+const role = sessionStorage.getItem("role");
+
+if(role !== "teacher"){
+
+    window.location.href="index.html";
+
+}
+
+</script>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Research | Student Archive Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar" id="sidebar">
+
+    <img src="images/logo.png" class="logo">
+
+<h2 class="school-title">YASCI</h2>
+
+<hr class="sidebar-line">
+    
+    <a href="dashboard.html">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+    </a>
+    <a href="archive.html">
+        <i class="fa-solid fa-folder"></i>
+        Archive Files
+    </a>
+    <a href="abstract.html">
+    <i class="fa-solid fa-file-lines"></i>
+    Abstract Archive
+</a>
+    <a href="upload.html" id="uploadMenu">
+        <i class="fa-solid fa-upload"></i>
+        Upload File
+    </a>
+    <a href="about.html">
+        <i class="fa-solid fa-circle-info"></i>
+        About
+    </a>
+    <a href="contact.html" id="contactMenu">
+        <i class="fa-solid fa-phone"></i>
+        Contact
+    </a>
+   <a href="#" onclick="teacherLogout(); return false;">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Logout
+</a>
+
+     <a href="activity-logs.html">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    Activity Logs
+</a>
+
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const researchFile = document.getElementById('researchFile');
+    const researchInfo = document.getElementById('researchFileInfo');
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadBtn = uploadForm && uploadForm.querySelector('button[type="submit"]');
+
+    if (researchFile && researchInfo) {
+        researchFile.addEventListener('change', function () {
+            const f = researchFile.files[0];
+            researchInfo.textContent = f ? `${f.name} (${Math.round(f.size/1024)} KB)` : '';
+        });
+    }
+
+    if (uploadForm && uploadBtn) {
+        uploadForm.addEventListener('submit', function () {
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Uploading…';
+            const p = document.getElementById('researchUploadProgress');
+            if (p) { p.style.display = 'block'; p.removeAttribute('value'); }
+        });
+
+        window.addEventListener('upload:error', function () {
+            uploadBtn.disabled = false;
+            uploadBtn.textContent = '📤 Upload Research';
+            const p = document.getElementById('researchUploadProgress');
+            if (p) { p.style.display = 'none'; p.value = 0; }
+        });
+    }
+
+    const abstractFile = document.getElementById('abstractFile');
+    const abstractInfo = document.getElementById('abstractFileInfo');
+    const abstractForm = document.getElementById('abstractUploadForm');
+    const abstractBtn = abstractForm && abstractForm.querySelector('button[type="submit"]');
+
+    if (abstractFile && abstractInfo) {
+        abstractFile.addEventListener('change', function () {
+            const f = abstractFile.files[0];
+            abstractInfo.textContent = f ? `${f.name} (${Math.round(f.size/1024)} KB)` : '';
+        });
+    }
+
+    if (abstractForm && abstractBtn) {
+        abstractForm.addEventListener('submit', function () {
+            abstractBtn.disabled = true;
+            abstractBtn.textContent = 'Uploading…';
+            const p = document.getElementById('abstractUploadProgress');
+            if (p) { p.style.display = 'block'; p.removeAttribute('value'); }
+        });
+
+        window.addEventListener('upload:error', function () {
+            abstractBtn.disabled = false;
+            abstractBtn.textContent = '📤 Upload Abstract';
+            const p = document.getElementById('abstractUploadProgress');
+            if (p) { p.style.display = 'none'; p.value = 0; }
+        });
+    }
+});
+</script>
+
+<div class="main">
+
+    <div class="header">
+
+        <div class="header-left">
+            <img src="images/logo.png" class="header-logo">
+        </div>
+
+        <div class="header-right">
+
+    <div class="header-top">
+
+        <div>
+
+            <h1>Student's Archive Management System</h1>
+
+            <p>Young Achievers' School of Caloocan, Inc.</p>
+
+            <div class="header-info">
+                <span id="date"></span> |
+                <span id="clock"></span>
+            </div>
+
+        </div>
+
+        <div class="user-card">
+
+            <div class="user-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="user-details">
+
+                <small>Welcome</small>
+
+                <div id="userEmail"></div>
+
+                <div id="userRole"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    
+</div>
+
+
+    <div class="upload-box">
+
+        <h2>Upload Research Paper</h2>
+
+        <p>
+            Fill out the information below before uploading the research paper.
+        </p>
+
+        <br>
+
+        <form id="uploadForm">
+
+                <label class="sr-only">Research Number</label>
+                <input
+            type="text"
+            id="researchNo"
+            readonly
+            required
+            placeholder="Research Number">
+
+            <label class="sr-only">Research Title</label>
+            <input type="text" id="title" placeholder="Enter research title" required>
+
+            <label class="sr-only">Researchers</label>
+            <input type="text" id="researcher" placeholder="Researchers" required>
+
+            <label class="sr-only">Research Adviser</label>
+            <input type="text" id="adviser" placeholder="Research adviser" required>
+
+            <label class="sr-only">School Year</label>
+            <select id="schoolYear" aria-label="School Year"></select>
+    
+            <label class="sr-only">Strand</label>
+            <select id="strand" required aria-label="Strand">
+                <option>ICT</option>
+                <option>STEM</option>
+                <option>ABM</option>
+                <option>HUMSS</option>
+                <option>HE</option>
+                <option>GAS</option>
+            </select>
+
+            <label class="sr-only">Archive Category</label>
+            <select id="category" aria-label="Archive Category">
+                <option>Research Paper</option>
+                <option>Capstone Project</option>
+                <option>Feasibility Study</option>
+                <option>Action Research</option>
+            </select>
+
+           <label class="sr-only">Remarks</label>
+<input type="text" id="remarks" placeholder="Remarks (optional)">
+
+<label class="sr-only">File Type</label>
+<select id="fileType" required aria-label="File Type">
+    <option value="PDF">📄 PDF</option>
+    <option value="Google Docs">📝 Google Docs</option>
+    <option value="Microsoft Word">📘 Microsoft Word</option>
+</select>
+
+<label>Research File (PDF/DOC/DOCX)</label>
+
+<input
+    type="file"
+    id="researchFile"
+    accept=".pdf,.doc,.docx"
+    required
+>
+            <div id="researchFileInfo" class="file-info" aria-live="polite" style="margin-top:8px;color:#444;"></div>
+            <progress id="researchUploadProgress" max="100" value="0" style="display:none;width:100%;margin-top:8px;"></progress>
+            <br>
+
+            <button type="submit" class="submit-btn">
+                📤 Upload Research
+            </button>
+        </form>
+   
+    </div>
+
+    <br>
+
+    <div class="upload-box">
+
+        <h2>Upload Abstract File</h2>
+
+        <p>
+            Upload the abstract separately here. This will be stored in the abstract archive.
+        </p>
+
+        <br>
+
+        <form id="abstractUploadForm">
+
+            <label class="sr-only">Research Number</label>
+            <input type="text" id="abstractResearchNo" placeholder="Research Number" readonly required>
+
+            <label class="sr-only">Research Title</label>
+            <input type="text" id="abstractTitle" placeholder="Research title" required>
+
+            <label class="sr-only">Researchers</label>
+            <input type="text" id="abstractResearcher" placeholder="Researchers" required>
+
+            <label class="sr-only">Research Adviser</label>
+            <input type="text" id="abstractAdviser" placeholder="Research adviser" required>
+
+            <label class="sr-only">School Year</label>
+            <select id="abstractSchoolYear" aria-label="Abstract School Year"></select>
+
+            <label class="sr-only">Strand</label>
+            <select id="abstractStrand" required aria-label="Abstract Strand">
+                <option>ICT</option>
+                <option>STEM</option>
+                <option>ABM</option>
+                <option>HUMSS</option>
+                <option>HE</option>
+                <option>GAS</option>
+            </select>
+
+            <label class="sr-only">Archive Category</label>
+            <select id="abstractCategory" aria-label="Abstract Archive Category">
+                <option>Research Paper</option>
+                <option>Capstone Project</option>
+                <option>Feasibility Study</option>
+                <option>Action Research</option>
+            </select>
+
+            <label class="sr-only">Remarks</label>
+            <input type="text" id="abstractRemarks" placeholder="Remarks (optional)">
+
+            <label class="sr-only">Abstract File (PDF)</label>
+            <input type="file" id="abstractFile" accept=".pdf" required>
+            <div id="abstractFileInfo" class="file-info" aria-live="polite" style="margin-top:8px;color:#444;"></div>
+            <progress id="abstractUploadProgress" max="100" value="0" style="display:none;width:100%;margin-top:8px;"></progress>
+
+            <br>
+
+            <button type="submit" class="submit-btn">
+                📤 Upload Abstract
+            </button>
+
+        </form>
+
+    </div>
+
+    <br>
+
+    <div class="upload-box">
+
+        <h2>Upload Reminder</h2>
+
+        <ul style="line-height:2; margin-left:20px;">
+
+            <li>Only PDF files are accepted.</li>
+            <li>Check the research information before uploading.</li>
+            <li>Make sure the file name is correct.</li>
+            <li>Only approved research papers should be uploaded.</li>
+
+        </ul>
+
+    </div>
+
+
+    <footer class="footer">
+        <hr>
+        <div class="footer-inner">
+            <p>
+                Student Archive Management System<br>
+                Young Achievers' School of Caloocan, Inc.<br>
+                School Year 2026–2027
+            </p>
+        </div>
+    </footer>
+
+</div>
+<!-- Use modular Firebase via ./firebase.js (imported by game.js) to avoid duplicate initialization -->
+
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="game.js"></script>
+<script type="module" src="auth.js"></script>
+
+</body>
+</html>
