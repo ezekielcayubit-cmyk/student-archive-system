@@ -326,6 +326,34 @@ document.getElementById("researchSearch")?.addEventListener("keyup", function ()
 });
 
 // ==========================
+// FOLDER SEARCH (Strand Filter)
+// ==========================
+
+document.getElementById("folderSearch")?.addEventListener("keyup", function () {
+
+    const keyword = this.value.toLowerCase().trim();
+    const folderContainer = document.getElementById("folderContainer");
+
+    if (!folderContainer) return;
+
+    const cards = folderContainer.querySelectorAll(".folder-card");
+
+    cards.forEach(card => {
+
+        const heading = card.querySelector("h3");
+        const text = heading ? heading.textContent.trim().toLowerCase() : "";
+
+        if (!keyword || text.includes(keyword)) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+
+    });
+
+});
+
+// ==========================
 // CATEGORY FILTER
 // ==========================
 
