@@ -162,3 +162,23 @@ body{
     text-decoration:underline;
 
 }
+
+@media (max-width:480px){
+    .login-box{
+        width:90%;
+        padding:25px 20px;
+    }
+    .login-box h2{
+        font-size:20px;
+    }
+    .input-box{
+        padding:12px;
+    }
+    .input-box input{
+        font-size:14px;
+    }
+    #loginBtn{
+        padding:12px;
+        font-size:14px;
+    }
+}

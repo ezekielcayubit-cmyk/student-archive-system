@@ -3835,3 +3835,1160 @@ transform:translateY(0);
     cursor:pointer;
     font-size:16px;
 }
+
+/* ==========================
+    SIDEBAR OVERLAY (MOBILE)
+ ========================== */
+
+.sidebar-overlay{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:999;
+}
+
+.sidebar.active ~ .sidebar-overlay{
+    display:block;
+}
+
+/* ==========================
+    MOBILE RESPONSIVE (≤768px)
+ ========================== */
+
+@media (max-width:768px){
+
+    .menu-btn{
+        display:block;
+    }
+
+    .sidebar{
+        left:-260px;
+        transition:.3s;
+        width:260px;
+    }
+
+    .sidebar.active{
+        left:0;
+    }
+
+    .main,
+    .main-content,
+    .container,
+    .content{
+        margin-left:0 !important;
+        width:100% !important;
+        padding-top:70px;
+        padding:15px;
+    }
+
+    .header{
+        flex-direction:column;
+        text-align:center;
+        padding:15px;
+    }
+
+    .header-logo{
+        margin:0 0 15px 0;
+    }
+
+    .header-top{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+    }
+
+    .user-card{
+        min-width:auto;
+        width:100%;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .archive-table{
+        display:block;
+        overflow-x:auto;
+    }
+
+    .search{
+        max-width:100%;
+    }
+
+    .login-box{
+        width:90%;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .research-grid{
+        grid-template-columns:1fr;
+    }
+
+    .research-stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .library-features{
+        grid-template-columns:1fr;
+    }
+
+    .research-actions{
+        flex-direction:column;
+    }
+
+    .research-actions button{
+        width:100%;
+    }
+
+    .research-top{
+        flex-direction:column;
+    }
+
+    .research-toolbar{
+        flex-direction:column;
+    }
+
+    .research-toolbar select{
+        width:100%;
+    }
+
+    .research-toolbar .search{
+        min-width:auto;
+        width:100%;
+    }
+
+    .welcome-box{
+        padding:25px;
+    }
+
+    .welcome-content h2{
+        font-size:24px;
+    }
+
+    .dashboard-welcome{
+        padding:20px;
+    }
+
+    .archive-layout{
+        flex-direction:column;
+    }
+
+    .archive-left{
+        width:100%;
+        min-width:auto;
+    }
+
+    .archive-right{
+        max-width:100%;
+    }
+
+    .folder-summary{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .pagination{
+        flex-wrap:wrap;
+        gap:8px;
+    }
+
+    .pagination button{
+        padding:8px 14px;
+        font-size:14px;
+    }
+
+    .contact-grid{
+        grid-template-columns:1fr;
+    }
+
+    .feature-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .benefits{
+        grid-template-columns:1fr;
+    }
+
+    .upload-hero{
+        flex-direction:column;
+        text-align:center;
+        padding:20px;
+    }
+
+    .upload-hero-icon{
+        width:48px;
+        height:48px;
+        font-size:20px;
+    }
+
+    .upload-hero-content h2{
+        font-size:18px;
+    }
+
+    .file-container{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:20px;
+    }
+
+    .card h2{
+        font-size:32px;
+    }
+
+    .folder-card{
+        padding:15px;
+    }
+
+    .folder-icon img{
+        width:60px;
+    }
+
+    .folder-card h3{
+        font-size:18px;
+    }
+
+    .research-card{
+        padding:15px;
+    }
+
+    .research-card h3{
+        font-size:16px;
+    }
+
+    .info-box{
+        padding:12px;
+    }
+
+    .info-box span{
+        font-size:18px;
+    }
+
+    .theme-toggle-btn{
+        width:40px;
+        height:40px;
+        font-size:16px;
+        right:10px;
+        top:10px;
+    }
+
+    .header h1{
+        font-size:20px;
+    }
+
+    .school-title{
+        font-size:28px;
+    }
+
+    .pdf-icon{
+        width:50px;
+        height:50px;
+        font-size:24px;
+    }
+
+    .card-content{
+        grid-template-columns:1fr;
+    }
+
+    .archiveFolders{
+        grid-template-columns:1fr;
+    }
+
+    .footer{
+        padding:18px 12px;
+    }
+
+    .footer .footer-inner{
+        flex-direction:column;
+        align-items:center;
+        gap:10px;
+    }
+
+    .footer .footer-columns{
+        flex-direction:column;
+        gap:8px;
+        align-items:center;
+    }
+
+    .footer .footer-brand{
+        justify-content:center;
+    }
+
+    .logs-table{
+        font-size:13px;
+    }
+
+    .logs-table th,
+    .logs-table td{
+        padding:10px 8px;
+    }
+
+    .menu-btn{
+        top:10px;
+        left:10px;
+        padding:8px 12px;
+        font-size:18px;
+    }
+
+    .main{
+        padding-top:60px;
+    }
+}
+
+/* ==========================
+    SMALL PHONE (≤480px)
+ ========================== */
+
+@media (max-width:480px){
+
+    .main,
+    .main-content,
+    .container,
+    .content{
+        padding:10px;
+        padding-top:55px;
+    }
+
+    .header{
+        padding:10px;
+        margin-bottom:15px;
+    }
+
+    .header h1{
+        font-size:17px;
+    }
+
+    .header p{
+        font-size:13px;
+    }
+
+    .cards{
+        gap:12px;
+    }
+
+    .card{
+        padding:15px;
+        border-radius:14px;
+    }
+
+    .card h2{
+        font-size:26px;
+    }
+
+    .card p{
+        font-size:14px;
+    }
+
+    .login-box{
+        width:95%;
+        padding:25px 20px;
+        border-radius:12px;
+    }
+
+    .login-box h1{
+        font-size:22px;
+    }
+
+    .login-box input{
+        padding:10px;
+        font-size:14px;
+    }
+
+    .login-box button{
+        padding:10px;
+        font-size:14px;
+    }
+
+    .welcome-box{
+        padding:18px;
+        border-radius:16px;
+    }
+
+    .welcome-content h2{
+        font-size:20px;
+    }
+
+    .welcome-content p{
+        font-size:14px;
+    }
+
+    .dashboard-welcome{
+        padding:15px;
+        border-radius:12px;
+    }
+
+    .dashboard-welcome h2{
+        font-size:18px;
+    }
+
+    .dashboard-btn{
+        padding:10px 16px;
+        font-size:13px;
+        margin-right:6px;
+    }
+
+    .feature-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .feature-card{
+        padding:15px;
+    }
+
+    .feature-card i{
+        font-size:32px;
+    }
+
+    .feature-card h3{
+        font-size:15px;
+    }
+
+    .feature-card p{
+        font-size:13px;
+    }
+
+    .research-stats{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:12px;
+    }
+
+    .stat-card h2{
+        font-size:22px;
+    }
+
+    .stat-card p{
+        font-size:12px;
+    }
+
+    .research-card{
+        padding:12px;
+        border-radius:14px;
+    }
+
+    .research-card h3{
+        font-size:15px;
+    }
+
+    .research-card p{
+        font-size:13px;
+    }
+
+    .research-actions button{
+        padding:8px 12px;
+        font-size:13px;
+    }
+
+    .archive-layout{
+        gap:15px;
+    }
+
+    .archive-left{
+        padding:12px;
+    }
+
+    .archiveFolders{
+        gap:12px;
+    }
+
+    .folder-card{
+        padding:12px;
+        border-radius:12px;
+    }
+
+    .folder-icon img{
+        width:45px;
+    }
+
+    .folder-card h3{
+        font-size:16px;
+    }
+
+    .folder-card p{
+        font-size:12px;
+    }
+
+    .folder-btn{
+        padding:8px 14px;
+        font-size:13px;
+    }
+
+    .upload-box{
+        padding:15px;
+        border-radius:12px;
+    }
+
+    .upload-box h2{
+        font-size:16px;
+    }
+
+    .upload-box input,
+    .upload-box select,
+    .upload-box textarea{
+        padding:10px 12px;
+        font-size:14px;
+    }
+
+    .submit-btn{
+        padding:10px 14px;
+        font-size:14px;
+    }
+
+    .contact-grid{
+        gap:12px;
+    }
+
+    .contact-card{
+        padding:15px;
+    }
+
+    .contact-card i{
+        font-size:28px;
+    }
+
+    .contact-card h3{
+        font-size:15px;
+    }
+
+    .contact-card p{
+        font-size:13px;
+    }
+
+    #contactForm{
+        padding:0;
+    }
+
+    #contactForm label{
+        font-size:13px;
+    }
+
+    #contactForm input,
+    #contactForm textarea{
+        padding:10px;
+        font-size:14px;
+    }
+
+    .footer{
+        padding:14px 10px;
+    }
+
+    .footer p,
+    .footer .footer-inner p{
+        font-size:12px;
+    }
+
+    .footer .footer-brand{
+        font-size:13px;
+    }
+
+    .footer .footer-col a{
+        font-size:12px;
+    }
+
+    .pagination{
+        gap:5px;
+    }
+
+    .pagination button{
+        padding:6px 10px;
+        font-size:12px;
+    }
+
+    .pagination span{
+        font-size:12px;
+    }
+
+    .menu-btn{
+        top:8px;
+        left:8px;
+        padding:6px 10px;
+        font-size:16px;
+    }
+
+    .main{
+        padding-top:50px;
+    }
+
+    .header-top{
+        gap:10px;
+    }
+
+    .user-card{
+        padding:10px 14px;
+    }
+
+    .user-avatar{
+        width:45px;
+        height:45px;
+        font-size:20px;
+    }
+
+    .user-details small{
+        font-size:11px;
+    }
+
+    #userEmail{
+        font-size:13px;
+    }
+
+    #userRole{
+        font-size:11px;
+    }
+
+    .theme-toggle-btn{
+        width:36px;
+        height:36px;
+        font-size:14px;
+    }
+
+    .research-toolbar{
+        gap:8px;
+    }
+
+    .research-toolbar select{
+        padding:8px 10px;
+        font-size:13px;
+    }
+
+    .search{
+        padding:10px 14px;
+        font-size:13px;
+    }
+
+    .dashboard-btn{
+        display:block;
+        width:100%;
+        text-align:center;
+        margin-bottom:8px;
+        margin-right:0;
+    }
+
+    .archive-note{
+        padding:10px;
+        font-size:13px;
+    }
+
+    .logs-container{
+        padding:15px;
+    }
+
+    .activity-box{
+        padding:15px;
+    }
+
+    .recent-item{
+        padding:10px;
+    }
+
+    .card-buttons{
+        flex-direction:column;
+    }
+
+    .card-buttons button{
+        width:100%;
+    }
+
+    .research-badge{
+        font-size:11px;
+        padding:3px 8px;
+    }
+
+    .category-badge{
+        font-size:12px;
+        padding:4px 10px;
+    }
+
+    .number-badge{
+        font-size:12px;
+        padding:4px 8px;
+    }
+
+    .pdf-preview{
+        width:55px;
+        height:55px;
+    }
+
+    .pdf-preview img{
+        width:36px;
+        height:36px;
+    }
+
+    .pdf-box{
+        width:55px;
+        height:55px;
+    }
+
+    .pdf-box img{
+        width:40px;
+    }
+
+    .card-top{
+        gap:10px;
+    }
+
+    .card-title h3{
+        font-size:16px;
+    }
+
+    .card-content p{
+        padding:10px;
+        font-size:13px;
+    }
+
+    .research-header h2{
+        font-size:20px;
+    }
+
+    .header-text h2{
+        font-size:22px;
+    }
+
+    .header-text p{
+        font-size:13px;
+    }
+
+    .contact-header h2{
+        font-size:22px;
+    }
+
+    .contact-header p{
+        font-size:13px;
+    }
+
+    .about-hero i{
+        font-size:40px;
+    }
+
+    .about-hero h2{
+        font-size:20px;
+    }
+
+    .about-hero p{
+        font-size:13px;
+    }
+
+    .feature-card i{
+        font-size:22px;
+    }
+
+    .feature-card h4{
+        font-size:13px;
+    }
+
+    .feature-card p{
+        font-size:12px;
+    }
+
+    .info-table td{
+        padding:10px 8px;
+        font-size:13px;
+    }
+
+    .info-table td:first-child{
+        width:120px;
+    }
+
+    .welcome-library h2{
+        font-size:22px;
+    }
+
+    .welcome-library p{
+        font-size:13px;
+    }
+
+    .library-features{
+        gap:8px;
+    }
+
+    .feature{
+        padding:12px;
+        font-size:13px;
+    }
+
+    .library-message{
+        padding:10px;
+        font-size:13px;
+    }
+
+    .empty-state{
+        padding:40px 15px;
+    }
+
+    .empty-state img{
+        width:90px;
+    }
+
+    #scrollTopBtn{
+        width:45px;
+        height:45px;
+        font-size:16px;
+        bottom:15px;
+        right:15px;
+    }
+}
+
+/* ==========================
+    VERY SMALL PHONE (≤375px)
+ ========================== */
+
+@media (max-width:375px){
+
+    .main,
+    .main-content,
+    .container,
+    .content{
+        padding:8px;
+        padding-top:50px;
+    }
+
+    .header{
+        padding:8px;
+        margin-bottom:10px;
+    }
+
+    .header h1{
+        font-size:15px;
+    }
+
+    .header p{
+        font-size:12px;
+    }
+
+    .cards{
+        gap:8px;
+    }
+
+    .card{
+        padding:12px;
+    }
+
+    .card h2{
+        font-size:22px;
+    }
+
+    .card p{
+        font-size:12px;
+    }
+
+    .login-box{
+        width:98%;
+        padding:20px 15px;
+    }
+
+    .login-box h1{
+        font-size:20px;
+    }
+
+    .welcome-box{
+        padding:14px;
+    }
+
+    .welcome-content h2{
+        font-size:18px;
+    }
+
+    .welcome-content p{
+        font-size:12px;
+    }
+
+    .dashboard-welcome{
+        padding:12px;
+    }
+
+    .dashboard-welcome h2{
+        font-size:16px;
+    }
+
+    .feature-grid{
+        grid-template-columns:1fr;
+    }
+
+    .stat-card h2{
+        font-size:18px;
+    }
+
+    .stat-card p{
+        font-size:11px;
+    }
+
+    .research-card{
+        padding:10px;
+    }
+
+    .research-card h3{
+        font-size:14px;
+    }
+
+    .research-actions button{
+        padding:6px 10px;
+        font-size:12px;
+    }
+
+    .folder-card{
+        padding:10px;
+    }
+
+    .folder-icon img{
+        width:36px;
+    }
+
+    .folder-card h3{
+        font-size:14px;
+    }
+
+    .folder-card p{
+        font-size:11px;
+    }
+
+    .folder-btn{
+        padding:6px 10px;
+        font-size:12px;
+    }
+
+    .upload-box{
+        padding:12px;
+    }
+
+    .upload-box h2{
+        font-size:14px;
+    }
+
+    .upload-box input,
+    .upload-box select,
+    .upload-box textarea{
+        padding:8px 10px;
+        font-size:13px;
+    }
+
+    .submit-btn{
+        padding:8px 12px;
+        font-size:13px;
+    }
+
+    .contact-card{
+        padding:12px;
+    }
+
+    .contact-card i{
+        font-size:24px;
+    }
+
+    .contact-card h3{
+        font-size:13px;
+    }
+
+    .contact-card p{
+        font-size:12px;
+    }
+
+    .footer{
+        padding:10px 8px;
+    }
+
+    .footer p,
+    .footer .footer-inner p{
+        font-size:11px;
+    }
+
+    .menu-btn{
+        top:6px;
+        left:6px;
+        padding:5px 8px;
+        font-size:14px;
+    }
+
+    .main{
+        padding-top:45px;
+    }
+
+    .user-card{
+        padding:8px 10px;
+    }
+
+    .user-avatar{
+        width:36px;
+        height:36px;
+        font-size:16px;
+    }
+
+    .user-details small{
+        font-size:10px;
+    }
+
+    #userEmail{
+        font-size:11px;
+    }
+
+    #userRole{
+        font-size:10px;
+    }
+
+    .theme-toggle-btn{
+        width:32px;
+        height:32px;
+        font-size:12px;
+        right:6px;
+        top:6px;
+    }
+
+    .research-stats{
+        grid-template-columns:1fr 1fr;
+        gap:6px;
+    }
+
+    .stat-card{
+        padding:8px;
+    }
+
+    .stat-card h2{
+        font-size:18px;
+    }
+
+    .pagination button{
+        padding:5px 8px;
+        font-size:11px;
+    }
+
+    .pagination span{
+        font-size:11px;
+    }
+
+    .archive-note{
+        padding:8px;
+        font-size:12px;
+    }
+
+    .logs-table{
+        font-size:11px;
+    }
+
+    .logs-table th,
+    .logs-table td{
+        padding:8px 5px;
+    }
+
+    .dashboard-btn{
+        padding:8px 12px;
+        font-size:12px;
+    }
+
+    .header-text h2{
+        font-size:18px;
+    }
+
+    .contact-header h2{
+        font-size:18px;
+    }
+
+    .about-hero i{
+        font-size:32px;
+    }
+
+    .about-hero h2{
+        font-size:18px;
+    }
+
+    .info-table td{
+        padding:8px 5px;
+        font-size:12px;
+    }
+
+    .info-table td:first-child{
+        width:100px;
+    }
+
+    .welcome-library h2{
+        font-size:18px;
+    }
+
+    .welcome-library p{
+        font-size:12px;
+    }
+
+    .feature{
+        padding:10px;
+        font-size:12px;
+    }
+
+    .research-header h2{
+        font-size:18px;
+    }
+
+    .card-title h3{
+        font-size:14px;
+    }
+
+    .card-content p{
+        padding:8px;
+        font-size:12px;
+    }
+
+    .pdf-icon{
+        width:42px;
+        height:42px;
+        font-size:20px;
+    }
+
+    .pdf-box{
+        width:42px;
+        height:42px;
+    }
+
+    .pdf-box img{
+        width:30px;
+    }
+
+    .card-top{
+        gap:8px;
+    }
+
+    .pdf-icon{
+        width:42px;
+        height:42px;
+    }
+
+    .pdf-icon img{
+        width:28px;
+        height:28px;
+    }
+
+    .research-badge{
+        font-size:10px;
+        padding:2px 6px;
+    }
+
+    .category-badge{
+        font-size:11px;
+        padding:3px 8px;
+    }
+
+    .number-badge{
+        font-size:11px;
+        padding:3px 6px;
+    }
+
+    .empty-state{
+        padding:30px 10px;
+    }
+
+    .empty-state img{
+        width:70px;
+    }
+
+    #scrollTopBtn{
+        width:40px;
+        height:40px;
+        font-size:14px;
+    }
+}
