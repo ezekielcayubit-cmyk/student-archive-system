@@ -9,8 +9,6 @@ import {
 } from "./firebase.js";
 
 const isTeacher = sessionStorage.getItem("role") === "teacher";
-const LAST_UPLOAD_KEY = "latestUploadAt";
-let lastUploadAtValue = localStorage.getItem(LAST_UPLOAD_KEY);
 
 const uploadMenu = document.getElementById("uploadMenu");
 
@@ -20,11 +18,11 @@ if(uploadMenu && !isTeacher){
 
 }
 
-const contactMenu=document.getElementById("contactMenu");
+const activityLogsLink = document.querySelector('a[href="activity-logs.html"]');
 
-if(contactMenu && !isTeacher){
+if(activityLogsLink && !isTeacher){
 
-    contactMenu.style.display="none";
+    activityLogsLink.style.display="none";
 
 }
 
@@ -163,6 +161,8 @@ generateResearchNumber("researchNo");
 
         e.preventDefault();
 
+        try {
+
         // notify UI that upload started
         try {
             window.dispatchEvent(new Event('upload:start'));
@@ -171,134 +171,147 @@ generateResearchNumber("researchNo");
             console.warn('Could not dispatch upload:start', err);
         }
 
-        try {
-// Check if Research Number already exists
-const existing = await getDocs(collection(db, "research"));
+        // Check if Research Number already exists
+        const existing = await getDocs(collection(db, "research"));
 
-let duplicate = false;
+        let duplicate = false;
 
-existing.forEach((research) => {
+        existing.forEach((research) => {
 
-    const data = research.data();
+            const data = research.data();
 
-    if (
-        data.number.trim().toLowerCase() ===
-        document.getElementById("researchNo").value.trim().toLowerCase()
-    ) {
-        duplicate = true;
-    }
+            if (
+                data.number.trim().toLowerCase() ===
+                document.getElementById("researchNo").value.trim().toLowerCase()
+            ) {
+                duplicate = true;
+            }
 
-    if (
-        data.title.trim().toLowerCase() ===
-        document.getElementById("title").value.trim().toLowerCase()
-    ) {
-        duplicate = true;
-    }
+            if (
+                data.title.trim().toLowerCase() ===
+                document.getElementById("title").value.trim().toLowerCase()
+            ) {
+                duplicate = true;
+            }
 
-});
+        });
 
-if (duplicate) {
-    await Swal.fire({
-    icon: "warning",
-    title: "Duplicate Research",
-    text: "This research number or title already exists.",
-    confirmButtonColor: "#f39c12"
-});
-
-return;
-}
-
-
-const file = document.getElementById("researchFile").files[0];
-
-if (!file) {
-    Swal.fire({
-        icon: "warning",
-        title: "No File",
-        text: "Please select a PDF, DOC or DOCX file."
-    });
-    return;
-}
-
-const formData = new FormData();
-
-formData.append("file", file);
-formData.append("upload_preset", "student_archive");
-
-const response = await fetch(
-    "https://api.cloudinary.com/v1_1/itoh6vi9/auto/upload",
-    {
-        method: "POST",
-        body: formData
-    }
-);
-
-const uploadData = await response.json();
-
-if (!uploadData.secure_url) {
-    console.error(uploadData);
-
-    Swal.fire({
-        icon: "error",
-        title: "Upload Failed",
-        text: "Cloudinary did not return a file URL."
-    });
-
-    return;
-}
-
-const fileURL = uploadData.secure_url; 
-
-await addDoc(collection(db, "research"), {
-
-    number: document.getElementById("researchNo").value,
-
-    title: document.getElementById("title").value,
-
-    researcher: document.getElementById("researcher").value,
-
-    adviser: document.getElementById("adviser").value,
-
-    schoolYear: document.getElementById("schoolYear").value,
-
-    strand: document.getElementById("strand").value,
-
-    category: document.getElementById("category").value,
-
-    remarks: document.getElementById("remarks").value,
-
-    fileType: document.getElementById("fileType").value,
-
-    fileURL: fileURL,
-
-    status: "Approved"
-
-});
-
-await addDoc(collection(db, "activityLogs"), {
-
-    action: "Upload",
-
-    teacher: sessionStorage.getItem("teacherEmail") || "Teacher",
-
-    details: document.getElementById("title").value,
-
-    date: new Date().toISOString()
-
-});
-
-            localStorage.setItem(LAST_UPLOAD_KEY, new Date().toISOString());
-
+        if (duplicate) {
             await Swal.fire({
-                icon: "success",
-                title: "Upload Successful",
-                text: "Research uploaded successfully.",
-                confirmButtonColor: "#3085d6"
+            icon: "warning",
+            title: "Duplicate Research",
+            text: "This research number or title already exists.",
+            confirmButtonColor: "#f39c12"
+        });
+
+        return;
+        }
+
+
+        const file = document.getElementById("researchFile").files[0];
+
+        if (!file) {
+            Swal.fire({
+                icon: "warning",
+                title: "No File",
+                text: "Please select a PDF, DOC or DOCX file."
+            });
+            return;
+        }
+
+        const formData = new FormData();
+
+        formData.append("file", file);
+        formData.append("upload_preset", "student_archive");
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
+
+        const response = await fetch(
+            "https://api.cloudinary.com/v1_1/itoh6vi9/auto/upload",
+            {
+                method: "POST",
+                body: formData,
+                signal: controller.signal
+            }
+        );
+
+        clearTimeout(timeoutId);
+
+        const uploadData = await response.json();
+
+        if (!uploadData.secure_url) {
+            console.error(uploadData);
+
+            Swal.fire({
+                icon: "error",
+                title: "Upload Failed",
+                text: "Cloudinary did not return a file URL."
             });
 
-            uploadForm.reset();
+            return;
+        }
 
-            window.location.href = "archive.html";
+        const fileURL = uploadData.secure_url; 
+
+        await addDoc(collection(db, "research"), {
+
+            number: document.getElementById("researchNo").value,
+
+            title: document.getElementById("title").value,
+
+            researcher: document.getElementById("researcher").value,
+
+            adviser: document.getElementById("adviser").value,
+
+            schoolYear: document.getElementById("schoolYear").value,
+
+            strand: document.getElementById("strand").value,
+
+            gradeLevel: document.getElementById("gradeLevel").value,
+
+            category: document.getElementById("category").value,
+
+            remarks: document.getElementById("remarks").value,
+
+            fileType: document.getElementById("fileType").value,
+
+                 fileURL: fileURL,
+
+             status: "Approved",
+
+             createdAt: new Date().toISOString()
+
+         });
+
+        await addDoc(collection(db, "activityLogs"), {
+
+            action: "Upload",
+
+            teacher: sessionStorage.getItem("teacherEmail") || "Teacher",
+
+            details: document.getElementById("title").value,
+
+            date: new Date().toISOString()
+
+        });
+
+        try {
+                     window.dispatchEvent(new Event('upload:success'));
+                 } catch (err) {
+                     console.warn('Could not dispatch upload:success', err);
+                 }
+
+                 await Swal.fire({
+                     icon: "success",
+                     title: "Upload Successful",
+                     text: "Research uploaded successfully.",
+                     confirmButtonColor: "#3085d6"
+                 });
+
+                 uploadForm.reset();
+
+                 window.location.href = "archive.html";
         } catch (error) {
             console.error(error);
 
@@ -382,13 +395,19 @@ if (abstractUploadForm) {
             abstractFormData.append("file", abstractFile);
             abstractFormData.append("upload_preset", "student_archive");
 
+            const abstractController = new AbortController();
+            const abstractTimeoutId = setTimeout(() => abstractController.abort(), 120000); // 2 minute timeout
+
             const abstractResponse = await fetch(
                 "https://api.cloudinary.com/v1_1/itoh6vi9/auto/upload",
                 {
                     method: "POST",
-                    body: abstractFormData
+                    body: abstractFormData,
+                    signal: abstractController.signal
                 }
             );
+
+            clearTimeout(abstractTimeoutId);
 
             const abstractData = await abstractResponse.json();
 
@@ -408,6 +427,7 @@ if (abstractUploadForm) {
                 adviser: document.getElementById("abstractAdviser").value,
                 schoolYear: document.getElementById("abstractSchoolYear").value,
                 strand: document.getElementById("abstractStrand").value,
+                gradeLevel: document.getElementById("abstractGradeLevel").value,
                 category: document.getElementById("abstractCategory").value,
                 remarks: document.getElementById("abstractRemarks").value,
                 abstractFileURL: abstractData.secure_url,
@@ -420,8 +440,6 @@ if (abstractUploadForm) {
                 details: document.getElementById("abstractTitle").value,
                 date: new Date().toISOString()
             });
-
-            localStorage.setItem(LAST_UPLOAD_KEY, new Date().toISOString());
 
             try {
                 window.dispatchEvent(new Event('upload:success'));
@@ -1033,13 +1051,251 @@ if (summaryYear) {
 }
 
 loadDashboardStatistics();
+
+// ===============================
+// RECENT UPLOADS (Dashboard)
+// ===============================
+
+function formatRecentDate(dateString) {
+
+    if (!dateString) return "-";
+
+    const date = new Date(dateString);
+
+    const now = new Date();
+
+    const diffMs = now - date;
+
+    const diffHours = diffMs / (1000 * 60 * 60);
+
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+    if (diffHours < 1) {
+
+        const mins = Math.floor(diffMs / (1000 * 60));
+
+        return mins < 1 ? "Just now" : `${mins} min ago`;
+
+    } else if (diffHours < 24) {
+
+        return `${Math.floor(diffHours)}h ago`;
+
+    } else if (diffDays < 7) {
+
+        return `${Math.floor(diffDays)}d ago`;
+
+    } else {
+
+        return date.toLocaleDateString("en-PH", {
+
+            month: "short",
+
+            day: "numeric",
+
+            year: "numeric"
+
+        });
+
+    }
+
+}
+
+async function loadRecentUploads() {
+
+    const container = document.getElementById("recentUploads");
+
+    if (!container) return;
+
+    try {
+
+        const researchSnapshot = await getDocs(collection(db, "research"));
+        const abstractSnapshot = await getDocs(collection(db, "abstracts"));
+
+        let items = [];
+
+        researchSnapshot.forEach(doc => {
+
+            const data = doc.data();
+
+            items.push(Object.assign({ id: doc.id, type: "research" }, data));
+
+        });
+
+        abstractSnapshot.forEach(doc => {
+
+            const data = doc.data();
+
+            items.push(Object.assign({ id: doc.id, type: "abstract" }, data));
+
+        });
+
+        items.sort((a, b) => {
+
+            const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+
+            const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+
+            return bTime - aTime;
+
+        });
+
+        const recent = items.slice(0, 5);
+
+        if (recent.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="recent-upload-empty">
+
+                    <p>No research papers have been uploaded yet.</p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        let html = "";
+
+        recent.forEach(item => {
+
+            const safeTitle = (item.title || "-").replace(/'/g, "\\'");
+
+            const safeFileUrl = (item.fileURL || item.abstractFileURL || "").replace(/'/g, "\\'");
+
+            const safeDate = item.createdAt || "";
+
+            const typeLabel = item.type === "abstract" ? "Abstract" : "Research";
+
+            html += `
+
+                <div class="recent-upload-item" onclick="previewFile('${safeFileUrl}','${safeTitle}')">
+
+                    <div class="recent-upload-icon">
+
+                        <img src="images/pdf.png" alt="PDF">
+
+                    </div>
+
+                    <div class="recent-upload-meta">
+
+                        <strong>${item.title || "-"}</strong>
+
+                        <span class="recent-upload-strand">${typeLabel} · ${item.strand || "-"} · ${item.schoolYear || "-"}</span>
+
+                    </div>
+
+                    <span class="recent-upload-date">${formatRecentDate(safeDate)}</span>
+
+                </div>
+
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+    } catch (error) {
+
+        console.error("Recent uploads load error:", error);
+
+        container.innerHTML = `
+
+            <div class="recent-upload-empty">
+
+                <p>Unable to load recent uploads.</p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+window.loadRecentUploads = loadRecentUploads;
+
 window.addEventListener('focus', () => {
     const last = localStorage.getItem(LAST_UPLOAD_KEY);
     if (last && last !== lastUploadAtValue) {
         lastUploadAtValue = last;
         loadDashboardStatistics();
+        loadRecentUploads();
     }
 });
+
+// Real-time recent uploads listener (dashboard only)
+let recentUploadsUnsubscribe = null;
+
+function setupRecentUploadsListener() {
+    if (recentUploadsUnsubscribe) {
+        recentUploadsUnsubscribe();
+        recentUploadsUnsubscribe = null;
+    }
+    if (!window.location.pathname.includes("dashboard.html")) return;
+    const container = document.getElementById("recentUploads");
+    if (!container) return;
+    try {
+        recentUploadsUnsubscribe = onSnapshot(
+            query(collection(db, "research"), orderBy("createdAt", "desc")),
+            (snapshot) => {
+                const researches = [];
+                snapshot.forEach(doc => {
+                    researches.push(Object.assign({ id: doc.id, type: "research" }, doc.data()));
+                });
+                return getDocs(collection(db, "abstracts")).then(abstractSnapshot => {
+                    const abstracts = [];
+                    abstractSnapshot.forEach(doc => {
+                        abstracts.push(Object.assign({ id: doc.id, type: "abstract" }, doc.data()));
+                    });
+                    const allItems = researches.concat(abstracts);
+                    allItems.sort((a, b) => {
+                        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                        return bTime - aTime;
+                    });
+                    const recent = allItems.slice(0, 5);
+                    if (recent.length === 0) {
+                        container.innerHTML = `<div class="recent-upload-empty"><p>No research papers have been uploaded yet.</p></div>`;
+                        return;
+                    }
+                    let html = "";
+                    recent.forEach(item => {
+                        const safeTitle = (item.title || "-").replace(/'/g, "\\'");
+                        const safeFileUrl = (item.fileURL || item.abstractFileURL || "").replace(/'/g, "\\'");
+                        const safeDate = item.createdAt || "";
+                        const typeLabel = item.type === "abstract" ? "Abstract" : "Research";
+                        html += `<div class="recent-upload-item" onclick="previewFile('${safeFileUrl}','${safeTitle}')">
+                            <div class="recent-upload-icon"><img src="images/pdf.png" alt="PDF"></div>
+                            <div class="recent-upload-meta">
+                                <strong>${item.title || "-"}</strong>
+                                <span class="recent-upload-strand">${typeLabel} · ${item.strand || "-"} · ${item.schoolYear || "-"}</span>
+                            </div>
+                            <span class="recent-upload-date">${formatRecentDate(safeDate)}</span>
+                        </div>`;
+                    });
+                    container.innerHTML = html;
+                });
+            },
+            (error) => {
+                console.error("Recent uploads real-time listener error:", error);
+            }
+        );
+    } catch (error) {
+        console.error("Could not set up recent uploads listener:", error);
+    }
+}
+
+// Listen for upload success events to refresh recent uploads
+window.addEventListener('upload:success', () => {
+    loadRecentUploads();
+    setupRecentUploadsListener();
+});
+
+loadRecentUploads();
+setupRecentUploadsListener();
 
 
 // ==========================
@@ -1157,10 +1413,15 @@ async function loadFolderResearch() {
                 <p><strong>Researchers:</strong> ${data.researcher || "-"}</p>
                 <p><strong>Adviser:</strong> ${data.adviser || "-"}</p>
                 <p><strong>School Year:</strong> ${data.schoolYear || "-"}</p>
+                <p><strong>Grade Level:</strong> ${data.gradeLevel || "-"}</p>
                 <div class="research-actions">
-                    <button onclick="previewFile('${data.fileURL}','${data.title || "Research"}')">View</button>
-                    <button onclick="downloadFile('${data.fileURL}', '${(data.title || "Research").replace(/'/g, "\\'")}.pdf')">⬇ Download</button>
-                    ${isTeacher ? `<button onclick="editResearch('${researchDoc.id}')">✏ Edit</button><button onclick="deleteResearch('${researchDoc.id}')">🗑 Delete</button>` : ""}
+                    <button onclick="previewFile('${data.fileURL}','${data.title || "Research"}')">
+                        <i class="fa-solid fa-eye"></i> View
+                    </button>
+                    <button onclick="downloadFile('${data.fileURL}', '${(data.title || "Research").replace(/'/g, "\\'")}.pdf')">
+                        <i class="fa-solid fa-download"></i> Download
+                    </button>
+                    ${isTeacher ? `<button onclick="editResearch('${researchDoc.id}')"><i class="fa-solid fa-pen"></i> Edit</button><button onclick="deleteResearch('${researchDoc.id}')"><i class="fa-solid fa-trash"></i> Delete</button>` : ""}
                 </div>
             </div>
         `;
@@ -1221,6 +1482,13 @@ function buildResearchCardHTML(data, id) {
         <p><strong>School Year</strong><br>${data.schoolYear || "-"}</p>
 
         <p>
+    <strong>Grade Level</strong><br>
+    <span class="number-badge">
+        ${data.gradeLevel || "-"}
+    </span>
+</p>
+
+        <p>
     <strong>Category</strong><br>
     <span class="category-badge">
         ${data.category || "Research Paper"}
@@ -1232,22 +1500,20 @@ function buildResearchCardHTML(data, id) {
     <div class="research-actions">
 
     <button onclick="previewFile('${safeFileUrl}','${safeTitle}')">
-
-View
-
-</button>
+        <i class="fa-solid fa-eye"></i> View
+    </button>
 
     <button onclick="downloadResearchFile('${safeFileUrl}','${safeTitle}.pdf')">
-        ⬇ Download
+        <i class="fa-solid fa-download"></i> Download
     </button>
 
     ${isTeacher ? `
     <button onclick="editResearch('${id}')">
-        ✏ Edit
+        <i class="fa-solid fa-pen"></i> Edit
     </button>
 
     <button onclick="deleteResearch('${id}')">
-        🗑 Delete
+        <i class="fa-solid fa-trash"></i> Delete
     </button>
     ` : ""}
 
@@ -1597,21 +1863,23 @@ const data=doc.data();
 
 rows.push({
 
-"Research No.":data.number,
+    "Research No.":data.number,
 
-"Title":data.title,
+    "Title":data.title,
 
-"Researcher":data.researcher,
+    "Researcher":data.researcher,
 
-"Adviser":data.adviser,
+    "Adviser":data.adviser,
 
-"Strand":data.strand,
+    "Strand":data.strand,
 
-"Category":data.category,
+    "Grade Level":data.gradeLevel,
 
-"School Year":data.schoolYear,
+    "Category":data.category,
 
-"Remarks":data.remarks
+    "School Year":data.schoolYear,
+
+    "Remarks":data.remarks
 
 });
 
@@ -1726,10 +1994,10 @@ async function loadAbstractResearch() {
                 <p><strong>School Year:</strong> ${data.schoolYear || "-"}</p>
                 <div class="research-actions">
                     <button onclick="previewFile('${data.abstractFileURL}','${data.title || "Abstract"}')">
-                        View Abstract
+                        <i class="fa-solid fa-eye"></i> View Abstract
                     </button>
                     <button onclick="downloadAbstractFile('${data.abstractFileURL}','${(data.title || "Abstract").replace(/'/g, "\\'")}.pdf')">
-                        ⬇ Download Abstract
+                        <i class="fa-solid fa-download"></i> Download Abstract
                     </button>
                 </div>
             </div>
@@ -1996,6 +2264,13 @@ function displayResearchPage() {
         </p>
 
         <p>
+            <strong>Grade Level</strong><br>
+            <span class="number-badge">
+                ${data.gradeLevel || "-"}
+            </span>
+        </p>
+
+        <p>
             <strong>Category</strong><br>
             <span class="category-badge">
                 ${data.category || "Research Paper"}
@@ -2007,22 +2282,22 @@ function displayResearchPage() {
     <div class="research-actions">
 
         <button onclick="previewFile('${data.fileURL}','${data.title}')">
-            View
+            <i class="fa-solid fa-eye"></i> View
         </button>
 
         <button onclick="downloadFile('${data.fileURL}','${data.title}.pdf')">
-            ⬇ Download
+            <i class="fa-solid fa-download"></i> Download
         </button>
 
         ${
             isTeacher
             ? `
             <button onclick="editResearch('${id}')">
-                ✏ Edit
+                <i class="fa-solid fa-pen"></i> Edit
             </button>
 
             <button onclick="deleteResearch('${id}')">
-                🗑 Delete
+                <i class="fa-solid fa-trash"></i> Delete
             </button>
             `
             : ""

@@ -13,15 +13,15 @@ const id = params.get("id");
 async function loadResearch() {
 
     if (!id) {
-        alert("No research selected.");
+        alert("No abstract selected.");
         return;
     }
 
-    const researchRef = doc(db, "research", id);
+    const researchRef = doc(db, "abstracts", id);
     const researchSnap = await getDoc(researchRef);
 
     if (!researchSnap.exists()) {
-        alert("Research not found.");
+        alert("Abstract not found.");
         return;
     }
 
@@ -44,7 +44,7 @@ document.getElementById("saveEdit").addEventListener("click", async () => {
 
     try {
 
-        const researchRef = doc(db, "research", id);
+        const researchRef = doc(db, "abstracts", id);
 
         await updateDoc(researchRef, {
 
@@ -60,7 +60,7 @@ document.getElementById("saveEdit").addEventListener("click", async () => {
 
         await addDoc(collection(db, "activityLogs"), {
 
-            action: "Edit",
+            action: "Edit Abstract",
 
             teacher: sessionStorage.getItem("teacherEmail") || "Teacher",
 
@@ -72,13 +72,13 @@ document.getElementById("saveEdit").addEventListener("click", async () => {
 
         
 
-        window.location.href = "archive.html";
+        window.location.href = "abstract.html";
 
     } catch (error) {
 
         console.error(error);
 
-        alert("Failed to update research.");
+        alert("Failed to update abstract.");
 
     }
 

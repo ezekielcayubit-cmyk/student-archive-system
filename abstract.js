@@ -1,11 +1,25 @@
 import {
     db,
     collection,
-    getDocs
+    getDocs,
+    doc,
+    deleteDoc,
+    getDoc,
+    addDoc
 } from "./firebase.js";
 
 const researchList = document.getElementById("researchList");
 const isTeacher = sessionStorage.getItem("role") === "teacher";
+
+const uploadMenu = document.getElementById("uploadMenu");
+if(uploadMenu && !isTeacher){
+    uploadMenu.style.display="none";
+}
+
+const activityLogsLink = document.querySelector('a[href="activity-logs.html"]');
+if(activityLogsLink && !isTeacher){
+    activityLogsLink.style.display="none";
+}
 
 let allAbstracts = [];
 let currentStrand = "";
@@ -44,6 +58,8 @@ async function loadAbstractFolder(strand) {
             }
 
         });
+
+        console.log("Loaded abstracts:", allAbstracts.map(a => ({ id: a.id, title: a.title, gradeLevel: a.gradeLevel })));
 
         renderAbstractCards(allAbstracts);
 
@@ -183,6 +199,11 @@ function renderAbstractCards(list) {
         <span>${data.schoolYear || "-"}</span>
     </div>
 
+    <div class="info-box">
+        <label>Grade Level</label>
+        <span>${data.gradeLevel || "-"}</span>
+    </div>
+
 </div>
 
 <div class="research-actions">
@@ -196,6 +217,18 @@ function renderAbstractCards(list) {
         <i class="fa-solid fa-download"></i>
         Download
     </button>
+
+    ${isTeacher ? `
+    <button onclick="editAbstract('${data.id}')">
+        <i class="fa-solid fa-pen"></i>
+        Edit
+    </button>
+
+    <button onclick="deleteAbstract('${data.id}')">
+        <i class="fa-solid fa-trash"></i>
+        Delete
+    </button>
+    ` : ""}
 
 </div>
 `;
@@ -439,6 +472,8 @@ document.getElementById("exportExcel")?.addEventListener("click", () => {
 
         Strand: data.strand,
 
+        "Grade Level": data.gradeLevel,
+
         Category: data.category,
 
         "School Year": data.schoolYear
@@ -529,6 +564,79 @@ async function downloadFile(url, fileName = "Abstract.pdf") {
 }
 
 window.downloadFile = downloadFile;
+
+window.editAbstract = function(id) {
+
+    window.location.href = `editAbstract.html?id=${id}`;
+
+}
+
+async function deleteAbstract(id) {
+
+    const result = await Swal.fire({
+        title: "Delete Abstract?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "🗑 Delete",
+        cancelButtonText: "Cancel"
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+
+      const abstractDoc = await getDoc(doc(db, "abstracts", id));
+
+    const abstractTitle = abstractDoc.exists()
+        ? abstractDoc.data().title
+        : "Unknown Abstract";
+
+    await deleteDoc(doc(db, "abstracts", id));
+
+    await addDoc(collection(db, "activityLogs"), {
+
+        action: "Delete Abstract",
+
+        teacher: sessionStorage.getItem("teacherEmail") || "Teacher",
+
+        details: abstractTitle,
+
+        date: new Date().toISOString()
+
+    });
+
+        await Swal.fire({
+            icon: "success",
+            title: "Deleted!",
+            text: "Abstract deleted successfully.",
+            timer: 1800,
+            showConfirmButton: false
+        });
+
+        location.reload();
+
+    } catch (error) {
+
+        console.error("Delete abstract error:", error);
+
+        Swal.fire({
+
+            icon: "error",
+
+            title: "Delete Failed",
+
+            text: error?.message || "Unable to delete the abstract."
+
+        });
+
+    }
+
+}
+
+window.deleteAbstract = deleteAbstract;
 
 // ==========================
 // HEADER USER INFO

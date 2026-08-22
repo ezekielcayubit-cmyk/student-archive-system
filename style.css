@@ -2355,12 +2355,19 @@ transform:translateY(0);
     color:white;
 
 }
-
 .research-actions button:hover{
 
     opacity:.9;
+
     transform:translateY(-2px);
 
+}
+
+.research-actions button,
+.card-buttons button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* CATEGORY BADGE */
@@ -3098,6 +3105,136 @@ color:white;
 .feature-card p{
     color:#666;
     line-height:1.6;
+}
+
+/* ==========================
+   RECENT UPLOADS (Dashboard)
+========================== */
+
+.recent-uploads-section{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:30px;
+}
+
+.recent-uploads-header h2{
+    color:#0b4ea2;
+    margin-bottom:8px;
+    font-size:24px;
+}
+
+.recent-uploads-header p{
+    color:#666;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.recent-uploads-container{
+    margin-top:20px;
+}
+
+.recent-upload-item{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--surface-strong);
+    transition:.3s;
+    cursor:pointer;
+}
+
+.recent-upload-item:hover{
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    border-color:#0d6efd;
+}
+
+.recent-upload-icon{
+    width:50px;
+    height:50px;
+    border-radius:12px;
+    background:#f5f7fb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.recent-upload-icon img{
+    width:36px;
+}
+
+.recent-upload-meta{
+    flex:1;
+}
+
+.recent-upload-meta strong{
+    display:block;
+    font-size:16px;
+    color:var(--text);
+    margin-bottom:4px;
+    font-weight:600;
+}
+
+.recent-upload-strand{
+    font-size:13px;
+    color:var(--muted);
+}
+
+.recent-upload-date{
+    font-size:12px;
+    color:var(--muted);
+    white-space:nowrap;
+}
+
+.recent-upload-empty,
+.recent-upload-item-skeleton{
+    padding:20px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.recent-upload-item-skeleton{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.recent-upload-skeleton-line{
+    height:16px;
+    background:var(--surface-border);
+    border-radius:8px;
+    width:100%;
+}
+
+.recent-upload-skeleton-line.short{
+    width:60%;
+    margin-left:auto;
+}
+
+.recent-uploads-footer{
+    margin-top:15px;
+    text-align:right;
+}
+
+.view-all-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:#0d6efd;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.view-all-link:hover{
+    color:#084298;
+    text-decoration:underline;
 }
 
 .about-page{

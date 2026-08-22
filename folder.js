@@ -44,15 +44,16 @@ card.innerHTML = `
 <p><strong>Researchers:</strong> ${data.researcher}</p>
 <p><strong>Adviser:</strong> ${data.adviser}</p>
 <p><strong>School Year:</strong> ${data.schoolYear}</p>
+<p><strong>Grade Level:</strong> ${data.gradeLevel || "-"}</p>
 
-<div class="research-actions">
+    <div class="research-actions">
 
     <button onclick="window.open('${data.fileURL}','_blank')">
-        👁 View
+        <i class="fa-solid fa-eye"></i> View
     </button>
 
     <button onclick="downloadFile('${data.fileURL}')">
-        ⬇ Download
+        <i class="fa-solid fa-download"></i> Download
     </button>
 
 </div>
