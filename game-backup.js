@@ -419,14 +419,6 @@ if(uploadButton && !isTeacher){
 
 }
 
-const exportButton = document.getElementById("exportExcel");
-
-if(exportButton && !isTeacher){
-
-    exportButton.style.display="none";
-
-}
-
 // ==========================
 // LOADING SCREEN
 // ==========================
@@ -1121,7 +1113,7 @@ window.loadFolder = async function (strand) {
 
     if (!title || !list) return;
 
-    title.textContent = `📁 ${strand} Research Archive`;
+    title.textContent = `${strand} Research Archive`;
 
     list.innerHTML = "<p>Loading...</p>";
 
@@ -1395,97 +1387,6 @@ if (contactForm) {
             });
         }
     });
-}
-
-const exportExcel = document.getElementById("exportExcel");
-
-if(exportExcel){
-
-exportExcel.addEventListener("click",async()=>{
-
-const snapshot = await getDocs(collection(db,"research")); 
-exportExcel.disabled = true;
-
-exportExcel.innerHTML =
-'<i class="fa-solid fa-spinner fa-spin"></i> Exporting...';
-
-exportExcel.disabled = false;
-
-exportExcel.innerHTML =
-'<i class="fa-solid fa-file-excel"></i> Export Excel';
-
-const rows=[];
-
-snapshot.forEach(doc=>{
-
-const data=doc.data();
-
-rows.push({
-
-"Research No.":data.number,
-
-"Title":data.title,
-
-"Researcher":data.researcher,
-
-"Adviser":data.adviser,
-
-"Strand":data.strand,
-
-"Category":data.category,
-
-"School Year":data.schoolYear,
-
-"Remarks":data.remarks
-
-});
-
-});
-
-const workbook=XLSX.utils.book_new();
-
-const worksheet = XLSX.utils.json_to_sheet(rows);
-
-XLSX.utils.sheet_add_aoa(
-worksheet,
-[
-["Young Achiever School of Caloocan Inc."],
-["Student Archive Management System"],
-["Research Records"],
-[],
-],
-{
-origin:"A1"
-}
-);
-
-XLSX.utils.book_append_sheet(workbook,worksheet,"Research");
-
-const today = new Date();
-
-const fileName =
-`Research_Archive_${today.getFullYear()}-${
-String(today.getMonth()+1).padStart(2,"0")
-}-${
-String(today.getDate()).padStart(2,"0")
-}.xlsx`;
-
-XLSX.writeFile(workbook,fileName);
-
-await Swal.fire({
-
-icon:"success",
-
-title:"Export Complete",
-
-text:"Research records exported successfully.",
-
-confirmButtonColor:"#2e7d32"
-
-});
-
-});
-
 }
 
 const emailBox = document.getElementById("userEmail");

@@ -182,30 +182,6 @@ if (filter) {
 }
 
 // ==========================
-// EXPORT EXCEL
-// ==========================
-
-const exportBtn = document.getElementById("exportExcel");
-
-if (exportBtn) {
-
-    exportBtn.addEventListener("click", () => {
-
-        const table = document.querySelector(".logs-table");
-
-        if (!table) return;
-
-        const workbook = XLSX.utils.table_to_book(table, {
-            sheet: "Activity Logs"
-        });
-
-        XLSX.writeFile(workbook, "ActivityLogs.xlsx");
-
-    });
-
-}
-
-// ==========================
 // START
 // ==========================
 

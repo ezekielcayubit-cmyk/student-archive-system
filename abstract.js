@@ -273,14 +273,6 @@ function updateStatistics(list) {
 
     });
 
-    document.getElementById("totalResearchFolder").textContent = list.length;
-
-    document.getElementById("totalResearchersFolder").textContent = researchers.size;
-
-    document.getElementById("totalAdvisersFolder").textContent = advisers.size;
-
-    document.getElementById("latestYearFolder").textContent = latestYear;
-
 }
 
 async function loadAbstractCounts() {
@@ -453,40 +445,6 @@ document.getElementById("sortResearch")?.addEventListener("change", function () 
     renderAbstractCards(sorted);
 
     updateStatistics(sorted);
-
-});
-
-// ==========================
-// EXPORT EXCEL
-// ==========================
-
-document.getElementById("exportExcel")?.addEventListener("click", () => {
-
-    const rows = allAbstracts.map(data => ({
-
-        Title: data.title,
-
-        Researchers: data.researcher,
-
-        Adviser: data.adviser,
-
-        Strand: data.strand,
-
-        "Grade Level": data.gradeLevel,
-
-        Category: data.category,
-
-        "School Year": data.schoolYear
-
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-
-    const workbook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Abstract Archive");
-
-    XLSX.writeFile(workbook, "AbstractArchive.xlsx");
 
 });
 
