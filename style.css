@@ -1612,7 +1612,6 @@ font-weight:bold;
 .archive-right{
     flex:1;
     max-width:900px;
-    margin:auto;
 }
 
 .panel-title h2{
