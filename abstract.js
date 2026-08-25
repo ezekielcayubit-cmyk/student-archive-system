@@ -155,54 +155,40 @@ function renderAbstractCards(list) {
         const safeTitle = (data.title || "").replace(/'/g, "\\'");
 
         card.innerHTML = `
-<div class="research-top">
+<div class="card-top">
 
-    <div class="pdf-box">
-
+    <div class="pdf-icon">
         <img src="images/pdf.png" alt="PDF">
-
     </div>
 
-    <div class="research-head">
+    <div class="card-title">
 
         <h3>${data.title || "-"}</h3>
 
-        <span class="strand-badge">
-
+        <span class="research-badge">
             ${data.strand || "-"}
-
         </span>
 
     </div>
 
 </div>
 
-<div class="research-grid">
+<div class="card-content">
 
-    <div class="info-box">
-        <label>Research No.</label>
-        <span>${data.number || "-"}</span>
-    </div>
+    <p><strong>Research No.</strong><br>
+    <span class="number-badge">${data.number || "-"}</span></p>
 
-    <div class="info-box">
-        <label>Researchers</label>
-        <span>${data.researcher || "-"}</span>
-    </div>
+    <p><strong>Researchers</strong><br>${data.researcher || "-"}</p>
 
-    <div class="info-box">
-        <label>Adviser</label>
-        <span>${data.adviser || "-"}</span>
-    </div>
+    <p><strong>Adviser</strong><br>${data.adviser || "-"}</p>
 
-    <div class="info-box">
-        <label>School Year</label>
-        <span>${data.schoolYear || "-"}</span>
-    </div>
+    <p><strong>Grade Level</strong><br>
+    <span class="number-badge">${data.gradeLevel || "-"}</span></p>
 
-    <div class="info-box">
-        <label>Grade Level</label>
-        <span>${data.gradeLevel || "-"}</span>
-    </div>
+    <p><strong>School Year</strong><br>${data.schoolYear || "-"}</p>
+
+    <p><strong>Category</strong><br>
+    <span class="category-badge">${data.category || "Research Paper"}</span></p>
 
 </div>
 
@@ -338,7 +324,9 @@ document.getElementById("researchSearch")?.addEventListener("keyup", function ()
 
             (data.adviser || "").toLowerCase().includes(keyword) ||
 
-            (data.schoolYear || "").toLowerCase().includes(keyword)
+            (data.schoolYear || "").toLowerCase().includes(keyword) ||
+
+            (data.gradeLevel || "").toLowerCase().includes(keyword)
 
         );
 
