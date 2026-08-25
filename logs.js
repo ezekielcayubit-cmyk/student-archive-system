@@ -84,11 +84,11 @@ async function loadActivityLogs() {
 
             <tr>
 
-                <td>${formatLogDate(log.date)}</td>
+                <td data-label="Date">${formatLogDate(log.date)}</td>
 
-                <td>${log.teacher || "-"}</td>
+                <td data-label="Teacher">${log.teacher || "-"}</td>
 
-                <td>
+                <td data-label="Action">
 
                     <span class="log-badge ${(log.action || "").toLowerCase()}">
 
@@ -98,7 +98,7 @@ async function loadActivityLogs() {
 
                 </td>
 
-                <td>${log.details || "-"}</td>
+                <td data-label="Details">${log.details || "-"}</td>
 
             </tr>
 

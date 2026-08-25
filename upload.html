@@ -56,15 +56,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         <i class="fa-solid fa-phone"></i>
         Contact
     </a>
-   <a href="#" onclick="teacherLogout(); return false;">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    Logout
-</a>
-
-     <a href="activity-logs.html">
-    <i class="fa-solid fa-clock-rotate-left"></i>
-    Activity Logs
-</a>
+    <a href="activity-logs.html">
+     <i class="fa-solid fa-clock-rotate-left"></i>
+     Activity Logs
+ </a>
+    <a href="#" onclick="teacherLogout(); return false;">
+     <i class="fa-solid fa-right-from-bracket"></i>
+     Logout
+ </a>
 
 </div>
 
@@ -270,10 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <br><br>
 
-<label>Research File (PDF/DOC/DOCX)</label>
-
-<br><br>
-
 <input
     type="file"
     id="researchFile"
@@ -367,6 +362,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <input type="file" id="abstractFile" accept=".pdf" required class="search">
             <div id="abstractFileInfo" class="file-info" aria-live="polite" style="margin-top:8px;color:#444;"></div>
             <progress id="abstractUploadProgress" max="100" value="0" style="display:none;width:100%;margin-top:8px;"></progress>
+            <p id="abstractUploadStatus" style="display:none;margin-top:6px;font-size:13px;color:#555;"></p>
 
             <br>
 

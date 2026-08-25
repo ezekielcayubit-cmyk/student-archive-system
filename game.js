@@ -361,6 +361,34 @@ if (abstractUploadForm) {
                 return;
             }
 
+            // File size validation
+            const maxSize = 20 * 1024 * 1024; // 20MB
+            const warnSize = 5 * 1024 * 1024;  // 5MB
+            
+            if (abstractFile.size > maxSize) {
+                Swal.fire({
+                    icon: "error",
+                    title: "File Too Large",
+                    text: "Abstract file must be under 20MB. Please compress the PDF and try again."
+                });
+                return;
+            }
+            
+            if (abstractFile.size > warnSize) {
+                const largeFileConfirm = await Swal.fire({
+                    icon: "warning",
+                    title: "Large File",
+                    text: `Your PDF is ${(abstractFile.size / (1024 * 1024)).toFixed(1)}MB. Uploading large files may take longer. Continue?`,
+                    showCancelButton: true,
+                    confirmButtonText: "Continue",
+                    cancelButtonText: "Cancel"
+                });
+                
+                if (!largeFileConfirm.isConfirmed) {
+                    return;
+                }
+            }
+
             const existingAbstracts = await getDocs(collection(db, "abstracts"));
             let duplicateAbstract = false;
 
@@ -395,29 +423,66 @@ if (abstractUploadForm) {
             abstractFormData.append("file", abstractFile);
             abstractFormData.append("upload_preset", "student_archive");
 
-            const abstractController = new AbortController();
-            const abstractTimeoutId = setTimeout(() => abstractController.abort(), 120000); // 2 minute timeout
+            const abstractBtn = abstractUploadForm.querySelector('button[type="submit"]');
+            const progressBar = document.getElementById("abstractUploadProgress");
+            const statusText = document.getElementById("abstractUploadStatus");
+            
+            if (abstractBtn) {
+                abstractBtn.disabled = true;
+                abstractBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+            }
+            if (progressBar) {
+                progressBar.style.display = 'block';
+                progressBar.value = 0;
+            }
+            if (statusText) {
+                statusText.style.display = 'block';
+                statusText.textContent = 'Uploading abstract...';
+            }
 
-            const abstractResponse = await fetch(
-                "https://api.cloudinary.com/v1_1/itoh6vi9/auto/upload",
-                {
-                    method: "POST",
-                    body: abstractFormData,
-                    signal: abstractController.signal
-                }
-            );
-
-            clearTimeout(abstractTimeoutId);
-
-            const abstractData = await abstractResponse.json();
+            // Use XMLHttpRequest for progress tracking
+            const uploadUrl = "https://api.cloudinary.com/v1_1/itoh6vi9/auto/upload";
+            
+            const abstractData = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", uploadUrl);
+                
+                xhr.upload.addEventListener("progress", (e) => {
+                    if (e.lengthComputable && progressBar) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        progressBar.value = percent;
+                        if (statusText) {
+                            statusText.textContent = `Uploading... ${percent}%`;
+                        }
+                    }
+                });
+                
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        try {
+                            resolve(JSON.parse(xhr.responseText));
+                        } catch (err) {
+                            reject(new Error("Invalid response from upload server."));
+                        }
+                    } else {
+                        try {
+                            const errorData = JSON.parse(xhr.responseText);
+                            reject(new Error(errorData.error?.message || "Upload failed."));
+                        } catch {
+                            reject(new Error("Upload failed with status " + xhr.status));
+                        }
+                    }
+                };
+                
+                xhr.onerror = function () {
+                    reject(new Error("Network error during upload."));
+                };
+                
+                xhr.send(abstractFormData);
+            });
 
             if (!abstractData.secure_url) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Upload Failed",
-                    text: "Cloudinary did not return an abstract file URL."
-                });
-                return;
+                throw new Error("Cloudinary did not return a file URL.");
             }
 
             await addDoc(collection(db, "abstracts"), {
@@ -431,7 +496,8 @@ if (abstractUploadForm) {
                 category: document.getElementById("abstractCategory").value,
                 remarks: document.getElementById("abstractRemarks").value,
                 abstractFileURL: abstractData.secure_url,
-                status: "Approved"
+                status: "Approved",
+                createdAt: new Date().toISOString()
             });
 
             await addDoc(collection(db, "activityLogs"), {
@@ -454,6 +520,18 @@ if (abstractUploadForm) {
             });
 
             abstractUploadForm.reset();
+            if (progressBar) {
+                progressBar.style.display = 'none';
+                progressBar.value = 0;
+            }
+            if (statusText) {
+                statusText.style.display = 'none';
+                statusText.textContent = '';
+            }
+            if (abstractBtn) {
+                abstractBtn.disabled = false;
+                abstractBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Abstract';
+            }
 
         } catch (error) {
             console.error(error);
@@ -465,8 +543,25 @@ if (abstractUploadForm) {
             Swal.fire({
                 icon: "error",
                 title: "Upload Failed",
-                text: "Unable to upload the abstract."
+                text: error.message || "Unable to upload the abstract."
             });
+            
+            const progressBar = document.getElementById("abstractUploadProgress");
+            const statusText = document.getElementById("abstractUploadStatus");
+            const abstractBtn = abstractUploadForm.querySelector('button[type="submit"]');
+            
+            if (progressBar) {
+                progressBar.style.display = 'none';
+                progressBar.value = 0;
+            }
+            if (statusText) {
+                statusText.style.display = 'none';
+                statusText.textContent = '';
+            }
+            if (abstractBtn) {
+                abstractBtn.disabled = false;
+                abstractBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Abstract';
+            }
         }
 
     });
@@ -1091,204 +1186,6 @@ function formatRecentDate(dateString) {
     }
 
 }
-
-async function loadRecentUploads() {
-
-    const container = document.getElementById("recentUploads");
-
-    if (!container) return;
-
-    try {
-
-        const researchSnapshot = await getDocs(collection(db, "research"));
-        const abstractSnapshot = await getDocs(collection(db, "abstracts"));
-
-        let items = [];
-
-        researchSnapshot.forEach(doc => {
-
-            const data = doc.data();
-
-            items.push(Object.assign({ id: doc.id, type: "research" }, data));
-
-        });
-
-        abstractSnapshot.forEach(doc => {
-
-            const data = doc.data();
-
-            items.push(Object.assign({ id: doc.id, type: "abstract" }, data));
-
-        });
-
-        items.sort((a, b) => {
-
-            const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-
-            const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-
-            return bTime - aTime;
-
-        });
-
-        const recent = items.slice(0, 5);
-
-        if (recent.length === 0) {
-
-            container.innerHTML = `
-
-                <div class="recent-upload-empty">
-
-                    <p>No research papers have been uploaded yet.</p>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-        let html = "";
-
-        recent.forEach(item => {
-
-            const safeTitle = (item.title || "-").replace(/'/g, "\\'");
-
-            const safeFileUrl = (item.fileURL || item.abstractFileURL || "").replace(/'/g, "\\'");
-
-            const safeDate = item.createdAt || "";
-
-            const typeLabel = item.type === "abstract" ? "Abstract" : "Research";
-
-            html += `
-
-                <div class="recent-upload-item" onclick="previewFile('${safeFileUrl}','${safeTitle}')">
-
-                    <div class="recent-upload-icon">
-
-                        <img src="images/pdf.png" alt="PDF">
-
-                    </div>
-
-                    <div class="recent-upload-meta">
-
-                        <strong>${item.title || "-"}</strong>
-
-                        <span class="recent-upload-strand">${typeLabel} · ${item.strand || "-"} · ${item.schoolYear || "-"}</span>
-
-                    </div>
-
-                    <span class="recent-upload-date">${formatRecentDate(safeDate)}</span>
-
-                </div>
-
-            `;
-
-        });
-
-        container.innerHTML = html;
-
-    } catch (error) {
-
-        console.error("Recent uploads load error:", error);
-
-        container.innerHTML = `
-
-            <div class="recent-upload-empty">
-
-                <p>Unable to load recent uploads.</p>
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-window.loadRecentUploads = loadRecentUploads;
-
-window.addEventListener('focus', () => {
-    const last = localStorage.getItem(LAST_UPLOAD_KEY);
-    if (last && last !== lastUploadAtValue) {
-        lastUploadAtValue = last;
-        loadDashboardStatistics();
-        loadRecentUploads();
-    }
-});
-
-// Real-time recent uploads listener (dashboard only)
-let recentUploadsUnsubscribe = null;
-
-function setupRecentUploadsListener() {
-    if (recentUploadsUnsubscribe) {
-        recentUploadsUnsubscribe();
-        recentUploadsUnsubscribe = null;
-    }
-    if (!window.location.pathname.includes("dashboard.html")) return;
-    const container = document.getElementById("recentUploads");
-    if (!container) return;
-    try {
-        recentUploadsUnsubscribe = onSnapshot(
-            query(collection(db, "research"), orderBy("createdAt", "desc")),
-            (snapshot) => {
-                const researches = [];
-                snapshot.forEach(doc => {
-                    researches.push(Object.assign({ id: doc.id, type: "research" }, doc.data()));
-                });
-                return getDocs(collection(db, "abstracts")).then(abstractSnapshot => {
-                    const abstracts = [];
-                    abstractSnapshot.forEach(doc => {
-                        abstracts.push(Object.assign({ id: doc.id, type: "abstract" }, doc.data()));
-                    });
-                    const allItems = researches.concat(abstracts);
-                    allItems.sort((a, b) => {
-                        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-                        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-                        return bTime - aTime;
-                    });
-                    const recent = allItems.slice(0, 5);
-                    if (recent.length === 0) {
-                        container.innerHTML = `<div class="recent-upload-empty"><p>No research papers have been uploaded yet.</p></div>`;
-                        return;
-                    }
-                    let html = "";
-                    recent.forEach(item => {
-                        const safeTitle = (item.title || "-").replace(/'/g, "\\'");
-                        const safeFileUrl = (item.fileURL || item.abstractFileURL || "").replace(/'/g, "\\'");
-                        const safeDate = item.createdAt || "";
-                        const typeLabel = item.type === "abstract" ? "Abstract" : "Research";
-                        html += `<div class="recent-upload-item" onclick="previewFile('${safeFileUrl}','${safeTitle}')">
-                            <div class="recent-upload-icon"><img src="images/pdf.png" alt="PDF"></div>
-                            <div class="recent-upload-meta">
-                                <strong>${item.title || "-"}</strong>
-                                <span class="recent-upload-strand">${typeLabel} · ${item.strand || "-"} · ${item.schoolYear || "-"}</span>
-                            </div>
-                            <span class="recent-upload-date">${formatRecentDate(safeDate)}</span>
-                        </div>`;
-                    });
-                    container.innerHTML = html;
-                });
-            },
-            (error) => {
-                console.error("Recent uploads real-time listener error:", error);
-            }
-        );
-    } catch (error) {
-        console.error("Could not set up recent uploads listener:", error);
-    }
-}
-
-// Listen for upload success events to refresh recent uploads
-window.addEventListener('upload:success', () => {
-    loadRecentUploads();
-    setupRecentUploadsListener();
-});
-
-loadRecentUploads();
-setupRecentUploadsListener();
-
 
 // ==========================
 // PAGINATION
