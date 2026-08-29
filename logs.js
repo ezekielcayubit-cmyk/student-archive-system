@@ -1,13 +1,11 @@
-import { db, collection, getDocs } from "./firebase.js";
+import { db, collection, onSnapshot } from "./firebase.js";
 
 // ==========================
 // FORMAT DATE
 // ==========================
 
 function formatLogDate(dateString) {
-
     if (!dateString) return "-";
-
     return new Date(dateString).toLocaleString("en-PH", {
         year: "numeric",
         month: "short",
@@ -15,109 +13,186 @@ function formatLogDate(dateString) {
         hour: "2-digit",
         minute: "2-digit"
     });
-
 }
 
+function actionClass(action) {
+    return (action || "").toLowerCase().replace(/\s+/g, "-");
+}
+
+function normalizeAction(action) {
+    const a = (action || "").trim();
+    if (a === "Move to Trash" || a === "Purge Trash") return "Permanent Delete";
+    return a || "-";
+}
 
 const role = sessionStorage.getItem("role");
 
 if (role !== "teacher") {
-
     Swal.fire({
         icon: "warning",
         title: "Access Denied",
         text: "Teachers only."
     }).then(() => {
-
         window.location.href = "archive.html";
-
     });
-
 }
+
 // ==========================
-// LOAD ACTIVITY LOGS
+// STATE
 // ==========================
 
-async function loadActivityLogs() {
+const LOGS_PER_PAGE = 10;
 
-    const tbody = document.getElementById("logsBody");
+let allLogs = [];
+let filteredLogs = [];
+let currentPage = 1;
+let searchKeyword = "";
+let actionFilter = "";
 
-    if (!tbody) return;
+const tbody = document.getElementById("logsBody");
+const pagination = document.getElementById("logsPagination");
 
+if (tbody) {
     tbody.innerHTML = `
         <tr>
             <td colspan="4">Loading activity logs...</td>
         </tr>
     `;
+}
 
-    try {
+// ==========================
+// LIVE ACTIVITY LOGS (newest first, auto-refresh)
+// ==========================
 
-        const snapshot = await getDocs(collection(db, "activityLogs"));
-
-        let logs = [];
-
+if (tbody) {
+    onSnapshot(collection(db, "activityLogs"), (snapshot) => {
+        allLogs = [];
         snapshot.forEach((doc) => {
-
-            logs.push(doc.data());
-
+            allLogs.push(doc.data());
         });
-
-        logs.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        tbody.innerHTML = "";
-
-        if (logs.length === 0) {
-
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="4">No activity logs found.</td>
-                </tr>
-            `;
-
-            return;
-
-        }
-
-        logs.forEach((log) => {
-
-            tbody.innerHTML += `
-
-            <tr>
-
-                <td data-label="Date">${formatLogDate(log.date)}</td>
-
-                <td data-label="Teacher">${log.teacher || "-"}</td>
-
-                <td data-label="Action">
-
-                    <span class="log-badge ${(log.action || "").toLowerCase()}">
-
-                        ${log.action || "-"}
-
-                    </span>
-
-                </td>
-
-                <td data-label="Details">${log.details || "-"}</td>
-
-            </tr>
-
-            `;
-
-        });
-
-    } catch (error) {
-
+        allLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+        currentPage = 1;
+        applyFilters();
+    }, (error) => {
         console.error(error);
-
         tbody.innerHTML = `
             <tr>
                 <td colspan="4">Failed to load activity logs.</td>
             </tr>
         `;
+    });
+}
 
+// ==========================
+// FILTER + PAGINATE
+// ==========================
+
+function applyFilters() {
+    const kw = searchKeyword.trim().toLowerCase();
+
+    filteredLogs = allLogs.filter((log) => {
+        const matchesAction = !actionFilter ||
+            (log.action || "").toLowerCase() === actionFilter;
+
+        const matchesKeyword = !kw ||
+            (log.teacher || "").toLowerCase().includes(kw) ||
+            (log.action || "").toLowerCase().includes(kw) ||
+            (log.details || "").toLowerCase().includes(kw) ||
+            formatLogDate(log.date).toLowerCase().includes(kw);
+
+        return matchesAction && matchesKeyword;
+    });
+
+    const totalPages = Math.max(1, Math.ceil(filteredLogs.length / LOGS_PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    renderLogs();
+    renderPagination();
+}
+
+function renderLogs() {
+    if (!tbody) return;
+
+    if (filteredLogs.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4">No activity logs found.</td>
+            </tr>
+        `;
+        return;
     }
 
+    const start = (currentPage - 1) * LOGS_PER_PAGE;
+    const pageItems = filteredLogs.slice(start, start + LOGS_PER_PAGE);
+
+    tbody.innerHTML = "";
+
+    pageItems.forEach((log) => {
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td data-label="Date">${formatLogDate(log.date)}</td>
+
+            <td data-label="Teacher">${log.teacher || "-"}</td>
+
+            <td data-label="Action">
+
+                <span class="log-badge ${actionClass(normalizeAction(log.action))}">
+
+                    ${normalizeAction(log.action)}
+
+                </span>
+
+            </td>
+
+            <td data-label="Details">${log.details || "-"}</td>
+
+        </tr>
+
+        `;
+    });
+}
+
+function renderPagination() {
+    if (!pagination) return;
+
+    const totalPages = Math.max(1, Math.ceil(filteredLogs.length / LOGS_PER_PAGE));
+
+    if (filteredLogs.length <= LOGS_PER_PAGE) {
+        pagination.innerHTML = "";
+        return;
+    }
+
+    pagination.innerHTML = `
+        <button type="button" data-page="prev" ${currentPage === 1 ? "disabled" : ""}>
+            Previous
+        </button>
+        <span>Page ${currentPage} of ${totalPages}</span>
+        <button type="button" data-page="next" ${currentPage === totalPages ? "disabled" : ""}>
+            Next
+        </button>
+    `;
+
+    const container = document.querySelector(".logs-container");
+
+    pagination.querySelector('[data-page="prev"]')?.addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderLogs();
+            renderPagination();
+            if (container) container.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    });
+
+    pagination.querySelector('[data-page="next"]')?.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderLogs();
+            renderPagination();
+            if (container) container.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    });
 }
 
 // ==========================
@@ -127,22 +202,11 @@ async function loadActivityLogs() {
 const search = document.getElementById("logSearch");
 
 if (search) {
-
     search.addEventListener("input", function () {
-
-        const keyword = this.value.toLowerCase();
-
-        document.querySelectorAll("#logsBody tr").forEach((row) => {
-
-            row.style.display =
-                row.textContent.toLowerCase().includes(keyword)
-                    ? ""
-                    : "none";
-
-        });
-
+        searchKeyword = this.value;
+        currentPage = 1;
+        applyFilters();
     });
-
 }
 
 // ==========================
@@ -152,37 +216,9 @@ if (search) {
 const filter = document.getElementById("actionFilter");
 
 if (filter) {
-
     filter.addEventListener("change", function () {
-
-        const action = this.value.toLowerCase();
-
-        document.querySelectorAll("#logsBody tr").forEach((row) => {
-
-            if (!action) {
-
-                row.style.display = "";
-
-                return;
-
-            }
-
-            const badge = row.querySelector(".log-badge");
-
-            row.style.display =
-                badge &&
-                badge.textContent.toLowerCase() === action
-                    ? ""
-                    : "none";
-
-        });
-
+        actionFilter = this.value.toLowerCase();
+        currentPage = 1;
+        applyFilters();
     });
-
 }
-
-// ==========================
-// START
-// ==========================
-
-loadActivityLogs();

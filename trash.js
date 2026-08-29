@@ -17,6 +17,32 @@ import {
 const TRASH_COLLECTION = "trash";
 const PURGE_DAYS = 30;
 
+// Centralized, deduplicated activity logging.
+// `op` differentiates move-to-trash vs purge vs restore so the same
+// document does not create a duplicate log within a short window.
+async function logActivity({ action, teacher, details, docId, op }) {
+    const logKey = docId && op ? `${docId}|${op}` : null;
+
+    if (logKey) {
+        const snap = await getDocs(
+            query(collection(db, "activityLogs"), where("logKey", "==", logKey))
+        );
+        const isDuplicate = snap.docs.some((d) => {
+            const t = new Date(d.data().date).getTime();
+            return Date.now() - t < 5000;
+        });
+        if (isDuplicate) return;
+    }
+
+    await addDoc(collection(db, "activityLogs"), {
+        action,
+        teacher,
+        details,
+        ...(logKey ? { logKey } : {}),
+        date: new Date().toISOString()
+    });
+}
+
 function isExpired(deletedAt) {
     if (!deletedAt) return true;
     const deleted = new Date(deletedAt);
@@ -62,11 +88,19 @@ export async function moveToTrash(collectionName, docId, docData, deletedBy) {
 
     await setDoc(trashRef, trashItem);
 
-    await addDoc(collection(db, "activityLogs"), {
-        action: "Move to Trash",
-        teacher: deletedBy || "Teacher",
-        details: `${docData?.title || docId} from ${collectionName}`,
-        date: new Date().toISOString()
+    await deleteDoc(doc(db, collectionName, docId));
+
+    const teacher = deletedBy || "Teacher";
+    const title = docData?.title || docId;
+    const number = docData?.number ? ` (${docData.number})` : "";
+    const collectionLabel = collectionName === "abstracts" ? "Abstract Archive" : "Archive";
+
+    await logActivity({
+        action: "Permanent Delete",
+        teacher,
+        docId,
+        op: "trash",
+        details: `"${title}"${number} was moved to Trash from the ${collectionLabel} by ${teacher}.`
     });
 
     return trashRef.id;
@@ -92,11 +126,17 @@ async function restoreFromTrash(trashDocId) {
 
     await deleteDoc(trashRef);
 
-    await addDoc(collection(db, "activityLogs"), {
+    const teacher = trashItem.deletedBy || "Teacher";
+    const title = trashItem.data?.title || trashItem.originalDocId;
+    const number = trashItem.data?.number ? ` (${trashItem.data.number})` : "";
+    const collectionLabel = trashItem.originalCollection === "abstracts" ? "Abstract Archive" : "Archive";
+
+    await logActivity({
         action: "Restore",
-        teacher: trashItem.deletedBy || "Teacher",
-        details: `${trashItem.data?.title || trashItem.originalDocId} to ${trashItem.originalCollection}`,
-        date: new Date().toISOString()
+        teacher,
+        docId: trashItem.originalDocId,
+        op: "restore",
+        details: `"${title}"${number} was restored to the ${collectionLabel} by ${teacher}.`
     });
 }
 
@@ -112,11 +152,16 @@ async function purgeTrashItem(trashDocId) {
 
     await deleteDoc(trashRef);
 
-    await addDoc(collection(db, "activityLogs"), {
-        action: "Purge Trash",
-        teacher: trashItem.deletedBy || "Teacher",
-        details: `${trashItem.data?.title || trashItem.originalDocId} permanently deleted`,
-        date: new Date().toISOString()
+    const teacher = trashItem.deletedBy || "Teacher";
+    const title = trashItem.data?.title || trashItem.originalDocId;
+    const number = trashItem.data?.number ? ` (${trashItem.data.number})` : "";
+
+    await logActivity({
+        action: "Permanent Delete",
+        teacher,
+        docId: trashItem.originalDocId,
+        op: "purge",
+        details: `"${title}"${number} was permanently deleted from Trash by ${teacher}.`
     });
 }
 

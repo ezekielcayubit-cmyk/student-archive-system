@@ -21,11 +21,53 @@ if(uploadMenu && !isTeacher){
 
 }
 
+if (uploadMenu) {
+
+    uploadMenu.addEventListener("click", function (e) {
+
+        e.preventDefault();
+
+        Swal.fire({
+
+            title: "What are you uploading?",
+            text: "Choose the type of file you want to upload.",
+            icon: "question",
+            showCancelButton: true,
+            showDenyButton: true,
+            confirmButtonText: "📄 Abstract",
+            denyButtonText: "📁 Archive",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#3085d6",
+            denyButtonColor: "#16a34a",
+            cancelButtonColor: "#6b7280"
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                window.location.href = "upload.html?type=abstract";
+            } else if (result.isDenied) {
+                window.location.href = "upload.html?type=archive";
+            }
+
+        });
+
+    });
+
+}
+
 const activityLogsLink = document.querySelector('a[href="activity-logs.html"]');
 
 if(activityLogsLink && !isTeacher){
 
     activityLogsLink.style.display="none";
+
+}
+
+const trashMenuLink = document.querySelector('a[href="trash.html"]');
+
+if(trashMenuLink && !isTeacher){
+
+    trashMenuLink.style.display="none";
 
 }
 
@@ -156,13 +198,86 @@ async function generateResearchNumber(inputId = "researchNo") {
     input.value = `R-${year}-${String(highest + 1).padStart(3, "0")}`;
 
 }
+function showFieldError(id, message) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add("input-error");
+    let err = el.parentNode.querySelector(".field-error");
+    if (!err) {
+        err = document.createElement("small");
+        err.className = "field-error";
+        el.insertAdjacentElement("afterend", err);
+    }
+    err.textContent = message;
+}
+
+function clearFieldError(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove("input-error");
+    const err = el.parentNode.querySelector(".field-error");
+    if (err) err.remove();
+}
+
+function validateUpload(fields) {
+    let firstInvalid = null;
+    fields.forEach((f) => {
+        const el = document.getElementById(f.id);
+        const ok = f.type === "file"
+            ? !!(el && el.files && el.files.length > 0)
+            : !!(el && el.value.trim() !== "");
+        if (ok) {
+            clearFieldError(f.id);
+        } else {
+            showFieldError(f.id, f.error || "This field is required.");
+            if (!firstInvalid) firstInvalid = f.id;
+        }
+    });
+    if (firstInvalid) {
+        const el = document.getElementById(firstInvalid);
+        if (el) el.focus();
+    }
+    return firstInvalid === null;
+}
+
 if (uploadForm) {
     
 generateResearchNumber("researchNo");
 
+    uploadForm.addEventListener("input", (e) => clearFieldError(e.target.id));
+    uploadForm.addEventListener("change", (e) => clearFieldError(e.target.id));
+
     uploadForm.addEventListener("submit", async function (e) {
 
         e.preventDefault();
+
+        const researchSubmitBtn = uploadForm.querySelector('button[type="submit"]');
+        const researchProgress = document.getElementById("researchUploadProgress");
+        if (researchSubmitBtn) {
+            researchSubmitBtn.disabled = false;
+            researchSubmitBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Research';
+        }
+        if (researchProgress) {
+            researchProgress.style.display = "none";
+            researchProgress.value = 0;
+        }
+
+        if (!validateUpload([
+            { id: "title", label: "Research Title" },
+            { id: "researcher", label: "Researchers" },
+            { id: "adviser", label: "Research Adviser" },
+            { id: "strand", label: "Strand" },
+            { id: "gradeLevel", label: "Grade Level" },
+            { id: "researchFile", label: "Research File", type: "file" }
+        ])) {
+            Swal.fire({
+                icon: "warning",
+                title: "Incomplete Form",
+                text: "Please fill out all required fields before uploading.",
+                confirmButtonColor: "#f39c12"
+            });
+            return;
+        }
 
         try {
 
@@ -222,6 +337,15 @@ generateResearchNumber("researchNo");
             return;
         }
 
+        if (researchSubmitBtn) {
+            researchSubmitBtn.disabled = true;
+            researchSubmitBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Uploading…';
+        }
+        if (researchProgress) {
+            researchProgress.style.display = "block";
+            researchProgress.removeAttribute("value");
+        }
+
         const formData = new FormData();
 
         formData.append("file", file);
@@ -276,8 +400,6 @@ generateResearchNumber("researchNo");
             category: document.getElementById("category").value,
 
             remarks: document.getElementById("remarks").value,
-
-            fileType: document.getElementById("fileType").value,
 
                  fileURL: fileURL,
 
@@ -340,9 +462,40 @@ if (abstractUploadForm) {
 
     generateResearchNumber("abstractResearchNo");
 
+    abstractUploadForm.addEventListener("input", (e) => clearFieldError(e.target.id));
+    abstractUploadForm.addEventListener("change", (e) => clearFieldError(e.target.id));
+
     abstractUploadForm.addEventListener("submit", async function (e) {
 
         e.preventDefault();
+
+        const abstractSubmitBtn = abstractUploadForm.querySelector('button[type="submit"]');
+        const abstractProgress = document.getElementById("abstractUploadProgress");
+        if (abstractSubmitBtn) {
+            abstractSubmitBtn.disabled = false;
+            abstractSubmitBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Abstract';
+        }
+        if (abstractProgress) {
+            abstractProgress.style.display = "none";
+            abstractProgress.value = 0;
+        }
+
+        if (!validateUpload([
+            { id: "abstractTitle", label: "Abstract Title" },
+            { id: "abstractResearcher", label: "Researchers" },
+            { id: "abstractAdviser", label: "Research Adviser" },
+            { id: "abstractStrand", label: "Strand" },
+            { id: "abstractGradeLevel", label: "Grade Level" },
+            { id: "abstractFile", label: "Abstract File", type: "file" }
+        ])) {
+            Swal.fire({
+                icon: "warning",
+                title: "Incomplete Form",
+                text: "Please fill out all required fields before uploading.",
+                confirmButtonColor: "#f39c12"
+            });
+            return;
+        }
 
         // notify UI that abstract upload started
         try {
@@ -1892,12 +2045,6 @@ async function loadActivityLogs() {
         console.error(error);
 
     }
-
-}
-
-if(document.getElementById("logsBody")){
-
-    loadActivityLogs();
 
 }
 

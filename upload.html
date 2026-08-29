@@ -48,13 +48,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         <i class="fa-solid fa-upload"></i>
         Upload File
     </a>
-    <a href="about.html">
+    <a href="about.html" id="aboutMenu">
         <i class="fa-solid fa-circle-info"></i>
-        About
-    </a>
-    <a href="contact.html" id="contactMenu">
-        <i class="fa-solid fa-phone"></i>
-        Contact
+        About & Contact
     </a>
     <a href="activity-logs.html">
      <i class="fa-solid fa-clock-rotate-left"></i>
@@ -78,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const researchFile = document.getElementById('researchFile');
     const researchInfo = document.getElementById('researchFileInfo');
     const uploadForm = document.getElementById('uploadForm');
-    const uploadBtn = uploadForm && uploadForm.querySelector('button[type="submit"]');
 
     if (researchFile && researchInfo) {
         researchFile.addEventListener('change', function () {
@@ -87,26 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (uploadForm && uploadBtn) {
-        uploadForm.addEventListener('submit', function () {
-            uploadBtn.disabled = true;
-            uploadBtn.textContent = 'Uploading…';
-            const p = document.getElementById('researchUploadProgress');
-            if (p) { p.style.display = 'block'; p.removeAttribute('value'); }
-        });
-
-        window.addEventListener('upload:error', function () {
-            uploadBtn.disabled = false;
-            uploadBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Research';
-            const p = document.getElementById('researchUploadProgress');
-            if (p) { p.style.display = 'none'; p.value = 0; }
-        });
-    }
-
     const abstractFile = document.getElementById('abstractFile');
     const abstractInfo = document.getElementById('abstractFileInfo');
     const abstractForm = document.getElementById('abstractUploadForm');
-    const abstractBtn = abstractForm && abstractForm.querySelector('button[type="submit"]');
 
     if (abstractFile && abstractInfo) {
         abstractFile.addEventListener('change', function () {
@@ -115,21 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (abstractForm && abstractBtn) {
-        abstractForm.addEventListener('submit', function () {
-            abstractBtn.disabled = true;
-            abstractBtn.textContent = 'Uploading…';
-            const p = document.getElementById('abstractUploadProgress');
-            if (p) { p.style.display = 'block'; p.removeAttribute('value'); }
-        });
-
-        window.addEventListener('upload:error', function () {
-            abstractBtn.disabled = false;
-            abstractBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Abstract';
-            const p = document.getElementById('abstractUploadProgress');
-            if (p) { p.style.display = 'none'; p.value = 0; }
-        });
-    }
 });
 </script>
 
@@ -186,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 
 
-    <div class="upload-box">
+    <div class="upload-box" id="researchUploadBox">
 
         <h2>Upload Research Paper</h2>
 
@@ -196,40 +159,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <br>
 
-        <form id="uploadForm">
+        <form id="uploadForm" novalidate>
 
-                <label class="sr-only">Research Number</label>
-                <input
-            type="text"
-            id="researchNo"
-            readonly
-            required
-            placeholder="Research Number"
-            class="search">
+                <input type="hidden" id="researchNo">
 
-            <br><br>
+            <br>
 
-            <label class="sr-only">Research Title</label>
+            <label class="field-label">Research Title</label>
             <input type="text" id="title" placeholder="Enter research title" required class="search">
 
             <br><br>
 
-            <label class="sr-only">Researchers</label>
+            <label class="field-label">Researchers</label>
             <input type="text" id="researcher" placeholder="Researchers" required class="search">
 
             <br><br>
 
-            <label class="sr-only">Research Adviser</label>
+            <label class="field-label">Research Adviser</label>
             <input type="text" id="adviser" placeholder="Research adviser" required class="search">
 
             <br><br>
 
-            <label class="sr-only">School Year</label>
-            <select id="schoolYear" aria-label="School Year" class="search"></select>
+            <label class="field-label">School Year</label>
+            <select id="schoolYear" aria-label="School Year" class="search" disabled></select>
     
             <br><br>
 
-            <label class="sr-only">Strand</label>
+            <label class="field-label">Strand</label>
             <select id="strand" required aria-label="Strand" class="search">
                 <option>ICT</option>
                 <option>STEM</option>
@@ -241,15 +197,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <br><br>
 
-            <label class="sr-only">Grade Level</label>
+            <label class="field-label">Grade Level</label>
             <select id="gradeLevel" required aria-label="Grade Level" class="search">
-                <option>Grade 11</option>
                 <option>Grade 12</option>
             </select>
 
             <br><br>
 
-            <label class="sr-only">Archive Category</label>
+            <label class="field-label">Archive Category</label>
             <select id="category" aria-label="Archive Category" class="search">
                 <option>Research Paper</option>
                 <option>Capstone Project</option>
@@ -259,21 +214,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <br><br>
 
-           <label class="sr-only">Remarks</label>
+           <label class="field-label">Remarks</label>
 <input type="text" id="remarks" placeholder="Remarks (optional)" class="search">
 
 <br><br>
 
-<label class="sr-only">File Type</label>
-<select id="fileType" required aria-label="File Type" class="search">
-    <option value="PDF">📄 PDF</option>
-    <option value="Google Docs">📝 Google Docs</option>
-    <option value="Microsoft Word">📘 Microsoft Word</option>
-</select>
-
-<br><br>
-
-<input
+            <label class="field-label">Research File</label>
+            <input
     type="file"
     id="researchFile"
     accept=".pdf,.doc,.docx"
@@ -290,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     </div>
 
-    <div class="upload-box">
+    <div class="upload-box" id="abstractUploadBox">
 
         <h2>Upload Abstract File</h2>
 
@@ -300,34 +247,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <br>
 
-        <form id="abstractUploadForm">
+        <form id="abstractUploadForm" novalidate>
 
-            <label class="sr-only">Research Number</label>
-            <input type="text" id="abstractResearchNo" placeholder="Research Number" readonly required class="search">
+            <input type="hidden" id="abstractResearchNo">
 
-            <br><br>
+            <br>
 
-            <label class="sr-only">Research Title</label>
+            <label class="field-label">Research Title</label>
             <input type="text" id="abstractTitle" placeholder="Research title" required class="search">
 
             <br><br>
 
-            <label class="sr-only">Researchers</label>
+            <label class="field-label">Researchers</label>
             <input type="text" id="abstractResearcher" placeholder="Researchers" required class="search">
 
             <br><br>
 
-            <label class="sr-only">Research Adviser</label>
+            <label class="field-label">Research Adviser</label>
             <input type="text" id="abstractAdviser" placeholder="Research adviser" required class="search">
 
             <br><br>
 
-            <label class="sr-only">School Year</label>
-            <select id="abstractSchoolYear" aria-label="Abstract School Year" class="search"></select>
+            <label class="field-label">School Year</label>
+            <select id="abstractSchoolYear" aria-label="Abstract School Year" class="search" disabled></select>
 
             <br><br>
 
-            <label class="sr-only">Strand</label>
+            <label class="field-label">Strand</label>
             <select id="abstractStrand" required aria-label="Abstract Strand" class="search">
                 <option>ICT</option>
                 <option>STEM</option>
@@ -339,15 +285,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <br><br>
 
-            <label class="sr-only">Grade Level</label>
+            <label class="field-label">Grade Level</label>
             <select id="abstractGradeLevel" required aria-label="Abstract Grade Level" class="search">
-                <option>Grade 11</option>
                 <option>Grade 12</option>
             </select>
 
             <br><br>
 
-            <label class="sr-only">Archive Category</label>
+            <label class="field-label">Archive Category</label>
             <select id="abstractCategory" aria-label="Abstract Archive Category" class="search">
                 <option>Research Paper</option>
                 <option>Capstone Project</option>
@@ -357,12 +302,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <br><br>
 
-            <label class="sr-only">Remarks</label>
+            <label class="field-label">Remarks</label>
             <input type="text" id="abstractRemarks" placeholder="Remarks (optional)" class="search">
 
             <br><br>
 
-            <label class="sr-only">Abstract File (PDF)</label>
+            <label class="field-label">Abstract File</label>
             <input type="file" id="abstractFile" accept=".pdf" required class="search">
             <div id="abstractFileInfo" class="file-info" aria-live="polite" style="margin-top:8px;color:#444;"></div>
             <progress id="abstractUploadProgress" max="100" value="0" style="display:none;width:100%;margin-top:8px;"></progress>
@@ -375,21 +320,6 @@ document.addEventListener('DOMContentLoaded', function () {
             </button>
 
         </form>
-
-    </div>
-
-    <div class="upload-box">
-
-        <h2>Upload Reminder</h2>
-
-        <ul style="line-height:2; margin-left:20px;">
-
-            <li>Only PDF files are accepted.</li>
-            <li>Check the research information before uploading.</li>
-            <li>Make sure the file name is correct.</li>
-            <li>Only approved research papers should be uploaded.</li>
-
-        </ul>
 
     </div>
 
@@ -412,6 +342,23 @@ document.addEventListener('DOMContentLoaded', function () {
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
 }
+</script>
+
+<script>
+(function () {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    const researchBox = document.getElementById("researchUploadBox");
+    const abstractBox = document.getElementById("abstractUploadBox");
+
+    if (type === "abstract" && researchBox && abstractBox) {
+        researchBox.style.display = "none";
+        abstractBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (type === "archive" && researchBox && abstractBox) {
+        abstractBox.style.display = "none";
+        researchBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+})();
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

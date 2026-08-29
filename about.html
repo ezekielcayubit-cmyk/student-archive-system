@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Student Archive Management System</title>
+    <title>About & Contact | Student Archive Management System</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -38,13 +38,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         <i class="fa-solid fa-upload"></i>
         Upload File
     </a>
-    <a href="about.html" class="active">
+    <a href="about.html" id="aboutMenu" class="active">
         <i class="fa-solid fa-circle-info"></i>
-        About
-    </a>
-    <a href="contact.html" id="contactMenu">
-        <i class="fa-solid fa-phone"></i>
-        Contact
+        About & Contact
     </a>
     <a href="activity-logs.html">
      <i class="fa-solid fa-clock-rotate-left"></i>
@@ -61,7 +57,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 </div>
 
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 <div class="main">
 
@@ -112,8 +108,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 </div>
 
-    
-</div>
+    </div>
 
 
     <div class="upload-box about-page">
@@ -132,87 +127,249 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
     </div>
 
-    <h3>What the System Can Do</h3>
+    <div class="about-section">
+        <h3><i class="fa-solid fa-list-check"></i> What the System Can Do</h3>
 
-    <div class="feature-grid">
+        <div class="feature-grid">
 
-        <div class="feature-card">
-            <i class="fa-solid fa-folder-open"></i>
-            <h4>Archive Research</h4>
-            <p>Store approved research papers in an organized digital archive.</p>
+            <div class="feature-card">
+                <i class="fa-solid fa-folder-open"></i>
+                <h4>Archive Research</h4>
+                <p>Store approved research papers in an organized digital archive.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <h4>Quick Search</h4>
+                <p>Find research papers instantly using keywords or titles.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-eye"></i>
+                <h4>View & Download</h4>
+                <p>Open and download research documents anytime.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-book"></i>
+                <h4>Digital Preservation</h4>
+                <p>Keep valuable research outputs organized for future reference.</p>
+            </div>
+
         </div>
-
-        <div class="feature-card">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <h4>Quick Search</h4>
-            <p>Find research papers instantly using keywords or titles.</p>
-        </div>
-
-        <div class="feature-card">
-            <i class="fa-solid fa-eye"></i>
-            <h4>View & Download</h4>
-            <p>Open and download research documents anytime.</p>
-        </div>
-
-        <div class="feature-card">
-            <i class="fa-solid fa-book"></i>
-            <h4>Digital Preservation</h4>
-            <p>Keep valuable research outputs organized for future reference.</p>
-        </div>
-
     </div>
 
-    <h3>Why This System?</h3>
+    <div class="about-section">
+        <h3><i class="fa-solid fa-circle-question"></i> Why This System?</h3>
 
-    <div class="benefits">
+        <div class="benefits">
 
-        <div><i class="fa-solid fa-check"></i> Organized digital archive</div>
+            <div><i class="fa-solid fa-check"></i> Organized digital archive</div>
 
-        <div><i class="fa-solid fa-check"></i> Faster document retrieval</div>
+            <div><i class="fa-solid fa-check"></i> Faster document retrieval</div>
 
-        <div><i class="fa-solid fa-check"></i> Easy file management</div>
+            <div><i class="fa-solid fa-check"></i> Easy file management</div>
 
-        <div><i class="fa-solid fa-check"></i> Supports teachers and students</div>
+            <div><i class="fa-solid fa-check"></i> Supports teachers and students</div>
 
-        <div><i class="fa-solid fa-check"></i> Preserves research records</div>
+            <div><i class="fa-solid fa-check"></i> Preserves research records</div>
 
+        </div>
     </div>
 
-    <h3>System Information</h3>
+    <div class="about-section">
+        <h3><i class="fa-solid fa-circle-info"></i> System Information</h3>
 
-    <table class="info-table">
+        <table class="info-table">
 
-        <tr>
-            <td>System</td>
-            <td>Student Archive Management System</td>
-        </tr>
+            <tr>
+                <td>System</td>
+                <td>Student Archive Management System</td>
+            </tr>
 
-        <tr>
-            <td>School</td>
-            <td>Young Achievers' School of Caloocan, Inc.</td>
-        </tr>
+            <tr>
+                <td>School</td>
+                <td>Young Achievers' School of Caloocan, Inc.</td>
+            </tr>
 
-        <tr>
-            <td>Primary Users</td>
-            <td>Teachers</td>
-        </tr>
+            <tr>
+                <td>Primary Users</td>
+                <td>Teachers</td>
+            </tr>
 
-        <tr>
-            <td>Version</td>
-            <td>1.0</td>
-        </tr>
+            <tr>
+                <td>Version</td>
+                <td>1.0</td>
+            </tr>
 
-        <tr>
-            <td>Technology</td>
-            <td>HTML • CSS • JavaScript • Firebase</td>
-        </tr>
+            <tr>
+                <td>Technology</td>
+                <td>HTML • CSS • JavaScript • Firebase</td>
+            </tr>
 
-        <tr>
-            <td>School Year</td>
-            <td>2026–2027</td>
-        </tr>
+            <tr>
+                <td>School Year</td>
+                <td>2026–2027</td>
+            </tr>
 
-    </table>
+        </table>
+    </div>
+
+    <hr class="about-divider">
+
+    <div class="about-section" id="developers">
+        <h3><i class="fa-solid fa-users"></i> Developers & Creators</h3>
+
+        <p style="color:#555;margin:0 0 5px;">
+            This system was developed by the following students:
+        </p>
+
+        <div class="developer-grid">
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="images/ezekiel.jpg" alt="Ezekiel Cayubit">
+                <h4>Ezekiel Cayubit</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232f80ed'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%23ffffff'/%3E%3Cpath d='M20 84c0-16 13-26 30-26s30 10 30 26z' fill='%23ffffff'/%3E%3C/svg%3E" alt="Justine Cuaresma">
+                <h4>Justine Cuaresma</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232f80ed'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%23ffffff'/%3E%3Cpath d='M20 84c0-16 13-26 30-26s30 10 30 26z' fill='%23ffffff'/%3E%3C/svg%3E" alt="Antonette Magdaraog">
+                <h4>Antonette Magdaraog</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="images/leomar.jpg" alt="Leomar Ramos">
+                <h4>Leomar Ramos</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="images/raven.jpg" alt="Raven Garcia">
+                <h4>Raven Garcia</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="images/inigo.jpg" alt="Inigo Hernandez">
+                <h4>Inigo Hernandez</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232f80ed'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%23ffffff'/%3E%3Cpath d='M20 84c0-16 13-26 30-26s30 10 30 26z' fill='%23ffffff'/%3E%3C/svg%3E" alt="Fiona Sergio">
+                <h4>Fiona Sergio</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232f80ed'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%23ffffff'/%3E%3Cpath d='M20 84c0-16 13-26 30-26s30 10 30 26z' fill='%23ffffff'/%3E%3C/svg%3E" alt="Marco Tinio">
+                <h4>Marco Tinio</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="images/sayon.jpg" alt="Bre Zhee Sayon">
+                <h4>Bre Zhee Sayon</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232f80ed'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%23ffffff'/%3E%3Cpath d='M20 84c0-16 13-26 30-26s30 10 30 26z' fill='%23ffffff'/%3E%3C/svg%3E" alt="Paña Hermes">
+                <h4>Paña Hermes</h4>
+            </div>
+
+            <div class="developer-card">
+                <img class="developer-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232f80ed'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%23ffffff'/%3E%3Cpath d='M20 84c0-16 13-26 30-26s30 10 30 26z' fill='%23ffffff'/%3E%3C/svg%3E" alt="Luiza Baliola">
+                <h4>Luiza Baliola</h4>
+            </div>
+
+        </div>
+    </div>
+
+    <hr class="about-divider">
+
+    <div class="about-section" id="contact">
+        <h3><i class="fa-solid fa-paper-plane"></i> Contact the Developers</h3>
+
+        <div class="contact-header" style="text-align:center;margin-bottom:25px;">
+            <p style="color:#555;max-width:700px;margin:0 auto;">
+                Have questions, suggestions, or encountered an issue while using the
+                Student Archive Management System? Send your message directly to the developers.
+            </p>
+        </div>
+
+        <div class="contact-grid">
+
+            <div class="contact-card">
+                <i class="fa-solid fa-envelope"></i>
+                <h3>Email</h3>
+                <p>ezekielcayubit@gmail.com</p>
+            </div>
+
+            <div class="contact-card">
+                <i class="fa-solid fa-code"></i>
+                <h3>Technical Support</h3>
+                <p>Report bugs, errors, or request system improvements.</p>
+            </div>
+
+            <div class="contact-card">
+                <i class="fa-solid fa-clock"></i>
+                <h3>Availability</h3>
+                <p>Monday – Friday<br>8:00 PM – 12:00 AM</p>
+            </div>
+
+        </div>
+
+        <form id="contactForm" class="contact-form">
+
+            <label for="name">Full Name</label>
+            <input
+                type="text"
+                id="name"
+                class="search"
+                placeholder="Enter your full name"
+                required>
+
+            <br><br>
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                class="search"
+                placeholder="Enter your email"
+                required>
+
+            <br><br>
+
+            <label for="message">Message</label>
+            <textarea
+                id="message"
+                rows="7"
+                class="search"
+                placeholder="Type your message here..."
+                required></textarea>
+
+            <br><br>
+
+            <button type="submit" class="save-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                Send Message
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+    <footer class="footer">
+        <hr>
+        <div class="footer-inner">
+            <p>
+                Student Archive Management System<br>
+                Young Achievers' School of Caloocan, Inc.<br>
+                School Year 2026–2027
+            </p>
+        </div>
+    </footer>
 
 </div>
 
@@ -222,6 +379,7 @@ function toggleSidebar() {
 }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="game.js"></script>
 <script type="module" src="auth.js"></script>

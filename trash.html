@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trash Bin | Student Archive Management System</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        if (sessionStorage.getItem("role") !== "teacher") {
+            window.location.href = "index.html";
+        }
+    </script>
 </head>
 <body>
 
@@ -37,13 +42,9 @@
         <i class="fa-solid fa-upload"></i>
         Upload File
     </a>
-    <a href="about.html">
+    <a href="about.html" id="aboutMenu">
         <i class="fa-solid fa-circle-info"></i>
-        About
-    </a>
-    <a href="contact.html" id="contactMenu">
-        <i class="fa-solid fa-phone"></i>
-        Contact
+        About & Contact
     </a>
     <a href="activity-logs.html">
      <i class="fa-solid fa-clock-rotate-left"></i>
@@ -152,6 +153,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="trash.js"></script>
+<script type="module" src="game.js"></script>
 <script>
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
