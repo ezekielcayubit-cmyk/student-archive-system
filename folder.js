@@ -4,6 +4,14 @@ import {
     getDocs
 } from "./firebase.js";
 
+const isTeacher = sessionStorage.getItem("role") === "teacher";
+
+const activityLogsLink = document.querySelector('a[href="activity-logs.html"]');
+
+if(activityLogsLink && !isTeacher){
+    activityLogsLink.style.display="none";
+}
+
 const params = new URLSearchParams(window.location.search);
 const strand = params.get("strand");
 
