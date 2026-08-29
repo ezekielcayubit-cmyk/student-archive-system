@@ -13,7 +13,8 @@ import {
     query,
     where,
     onSnapshot,
-    orderBy
+    orderBy,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -48,6 +49,7 @@ export {
     getDoc,
     deleteDoc,
     updateDoc,
+    setDoc,
     doc,
     query,
     where,

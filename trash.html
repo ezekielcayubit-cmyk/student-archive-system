@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Bin | Student Archive Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar" id="sidebar">
+
+    <img src="images/logo.png" class="logo">
+
+<h2 class="school-title">YASCI</h2>
+
+<hr class="sidebar-line">
+    
+
+    <a href="dashboard.html">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+    </a>
+    <a href="archive.html">
+        <i class="fa-solid fa-folder"></i>
+        Archive Files
+    </a>
+    <a href="abstract.html">
+    <i class="fa-solid fa-file-lines"></i>
+    Abstract Archive
+</a>
+    <a href="upload.html" id="uploadMenu">
+        <i class="fa-solid fa-upload"></i>
+        Upload File
+    </a>
+    <a href="about.html">
+        <i class="fa-solid fa-circle-info"></i>
+        About
+    </a>
+    <a href="contact.html" id="contactMenu">
+        <i class="fa-solid fa-phone"></i>
+        Contact
+    </a>
+    <a href="activity-logs.html">
+     <i class="fa-solid fa-clock-rotate-left"></i>
+     Activity Logs
+ </a>
+    <a href="trash.html" class="active">
+     <i class="fa-solid fa-trash-can"></i>
+     Trash Bin
+ </a>
+    <a href="#" onclick="teacherLogout(); return false;">
+     <i class="fa-solid fa-right-from-bracket"></i>
+     Logout
+ </a>
+
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="main">
+
+    <div class="header">
+
+        <div class="header-left">
+            <img src="images/logo.png" class="header-logo">
+        </div>
+
+        <div class="header-right">
+
+    <div class="header-top">
+
+        <div>
+
+            <h1>Student's Archive Management System</h1>
+
+            <p>Young Achievers' School of Caloocan, Inc.</p>
+
+            <div class="header-info">
+                <span id="date"></span> |
+                <span id="clock"></span>
+            </div>
+
+        </div>
+
+        <div class="user-card">
+
+            <div class="user-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="user-details">
+
+                <small>Welcome</small>
+
+                <div id="userEmail"></div>
+
+                <div id="userRole"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    
+</div>
+
+    <div class="upload-box">
+
+        <h2>🗑 Trash Bin</h2>
+
+        <p>
+            Deleted files are kept here for 30 days before being permanently removed.
+        </p>
+
+        <br>
+
+        <div class="trash-toolbar">
+
+            <button onclick="loadTrash()">
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+
+            <button onclick="emptyExpiredTrash()">
+                <i class="fa-solid fa-broom"></i> Empty Expired
+            </button>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <div id="trashBody" class="researchCards">
+
+        <div class="loading-state">
+            <h2>Loading trash...</h2>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="trash.js"></script>
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
+<script src="theme.js"></script>
+
+</body>
+</html>

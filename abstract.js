@@ -8,6 +8,8 @@ import {
     addDoc
 } from "./firebase.js";
 
+import { moveToTrash } from "./trash.js";
+
 const researchList = document.getElementById("researchList");
 const isTeacher = sessionStorage.getItem("role") === "teacher";
 
@@ -304,7 +306,9 @@ async function loadAbstractCounts() {
 
 }
 
-loadAbstractCounts();
+loadAbstractCounts().catch(error => {
+    console.error("Abstract counts failed:", error);
+});
 
 // ==========================
 // SEARCH
@@ -520,13 +524,13 @@ window.editAbstract = function(id) {
 async function deleteAbstract(id) {
 
     const result = await Swal.fire({
-        title: "Delete Abstract?",
-        text: "This action cannot be undone.",
+        title: "Move to Trash?",
+        text: "The abstract will be moved to trash and can be restored within 30 days.",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#d33",
+        confirmButtonColor: "#f39c12",
         cancelButtonColor: "#3085d6",
-        confirmButtonText: "🗑 Delete",
+        confirmButtonText: "🗑 Move to Trash",
         cancelButtonText: "Cancel"
     });
 
@@ -536,28 +540,16 @@ async function deleteAbstract(id) {
 
       const abstractDoc = await getDoc(doc(db, "abstracts", id));
 
-    const abstractTitle = abstractDoc.exists()
-        ? abstractDoc.data().title
-        : "Unknown Abstract";
+      const abstractData = abstractDoc.exists() ? abstractDoc.data() : {};
 
-    await deleteDoc(doc(db, "abstracts", id));
+      const abstractTitle = abstractData.title || "Unknown Abstract";
 
-    await addDoc(collection(db, "activityLogs"), {
-
-        action: "Delete Abstract",
-
-        teacher: sessionStorage.getItem("teacherEmail") || "Teacher",
-
-        details: abstractTitle,
-
-        date: new Date().toISOString()
-
-    });
+      await moveToTrash("abstracts", id, abstractData, sessionStorage.getItem("teacherEmail") || "Teacher");
 
         await Swal.fire({
             icon: "success",
-            title: "Deleted!",
-            text: "Abstract deleted successfully.",
+            title: "Moved to Trash!",
+            text: "Abstract moved to trash successfully.",
             timer: 1800,
             showConfirmButton: false
         });
@@ -574,7 +566,7 @@ async function deleteAbstract(id) {
 
             title: "Delete Failed",
 
-            text: error?.message || "Unable to delete the abstract."
+            text: error?.message || "Unable to move abstract to trash."
 
         });
 

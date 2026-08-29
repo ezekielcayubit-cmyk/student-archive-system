@@ -5,8 +5,11 @@ import {
     getDocs,
     getDoc,
     deleteDoc,
+    updateDoc,
     doc
 } from "./firebase.js";
+
+import { moveToTrash } from "./trash.js";
 
 const isTeacher = sessionStorage.getItem("role") === "teacher";
 
@@ -789,22 +792,24 @@ if (
 
 }
 
+}
 
 
+ 
  // ==========================
-// Delete research 
+ // Delete research 
 // ==========================
 
 async function deleteResearch(id) {
 
     const result = await Swal.fire({
-        title: "Delete Research?",
-        text: "This action cannot be undone.",
+        title: "Move to Trash?",
+        text: "The research will be moved to trash and can be restored within 30 days.",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#d33",
+        confirmButtonColor: "#f39c12",
         cancelButtonColor: "#3085d6",
-        confirmButtonText: "🗑 Delete",
+        confirmButtonText: "🗑 Move to Trash",
         cancelButtonText: "Cancel"
     });
 
@@ -814,28 +819,16 @@ async function deleteResearch(id) {
 
       const researchDoc = await getDoc(doc(db, "research", id));
 
-const researchTitle = researchDoc.exists()
-    ? researchDoc.data().title
-    : "Unknown Research";
+      const researchData = researchDoc.exists() ? researchDoc.data() : {};
 
-await deleteDoc(doc(db, "research", id));
+      const researchTitle = researchData.title || "Unknown Research";
 
-await addDoc(collection(db, "activityLogs"), {
-
-    action: "Delete",
-
-    teacher: sessionStorage.getItem("teacherEmail") || "Teacher",
-
-    details: researchTitle,
-
-    date: new Date().toISOString()
-
-});
+      await moveToTrash("research", id, researchData, sessionStorage.getItem("teacherEmail") || "Teacher");
 
         await Swal.fire({
             icon: "success",
-            title: "Deleted!",
-            text: "Research deleted successfully.",
+            title: "Moved to Trash!",
+            text: "Research moved to trash successfully.",
             timer: 1800,
             showConfirmButton: false
         });
@@ -849,7 +842,7 @@ await addDoc(collection(db, "activityLogs"), {
         Swal.fire({
             icon: "error",
             title: "Delete Failed",
-            text: "Unable to delete the research."
+            text: "Unable to move research to trash."
         });
 
     }
@@ -1021,6 +1014,8 @@ window.previewFile = previewFile;
 async function loadDashboardStatistics() {
     console.log("Dashboard function started");
 
+    try {
+
     const snapshot = await getDocs(collection(db, "research"));
 
     let strandCounts = {
@@ -1135,9 +1130,16 @@ if (summaryYear) {
     summaryYear.textContent = latestYear || "-";
 }
 
+    } catch (error) {
+
+        console.error("Dashboard statistics error:", error);
+
+    }
 }
 
-loadDashboardStatistics();
+loadDashboardStatistics().catch(error => {
+    console.error("Dashboard statistics failed:", error);
+});
 
 // ===============================
 // RECENT UPLOADS (Dashboard)
@@ -1232,7 +1234,9 @@ async function loadFolderCounts() {
         `${counts.GAS} Research Papers`;
 }
 
-loadFolderCounts();
+loadFolderCounts().catch(error => {
+    console.error("Folder counts failed:", error);
+});
 
 // ==========================
 // LOAD RESEARCH PER STRAND
@@ -1322,9 +1326,9 @@ async function loadFolderResearch() {
     document.getElementById("folderLatestYear").textContent = counts.latestYear || "-";
 }
 
-loadFolderResearch();
-
-loadFolderResearch();
+loadFolderResearch().catch(error => {
+    console.error("Folder research failed:", error);
+});
 
 function buildResearchCardHTML(data, id) {
     const safeTitle = String(data.title || "Untitled Research").replace(/'/g, "\\'");
@@ -1683,8 +1687,6 @@ window.editResearch = function(id){
 
 }
 
-}
-
 const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
@@ -1896,58 +1898,6 @@ async function loadActivityLogs() {
 if(document.getElementById("logsBody")){
 
     loadActivityLogs();
-
-}
-
-
-
-async function loadFolderCounts() {
-
-    const counts = {
-
-        ICT: 0,
-        STEM: 0,
-        ABM: 0,
-        HUMSS: 0,
-        HE: 0,
-        GAS: 0
-
-    };
-
-    const snapshot = await getDocs(collection(db, "research"));
-
-    snapshot.forEach(doc => {
-
-        const data = doc.data();
-
-        const strand = (data.strand || "").trim().toUpperCase();
-
-        if (counts[strand] !== undefined) {
-
-            counts[strand]++;
-
-        }
-
-
-    });
-
-    document.getElementById("ictCount").textContent =
-        counts.ICT + " Research Papers";
-
-    document.getElementById("stemCount").textContent =
-        counts.STEM + " Research Papers";
-
-    document.getElementById("abmCount").textContent =
-        counts.ABM + " Research Papers";
-
-    document.getElementById("humssCount").textContent =
-        counts.HUMSS + " Research Papers";
-
-    document.getElementById("heCount").textContent =
-        counts.HE + " Research Papers";
-
-    document.getElementById("gasCount").textContent =
-        counts.GAS + " Research Papers";
 
 }
 
