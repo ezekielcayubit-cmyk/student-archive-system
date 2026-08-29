@@ -32,6 +32,7 @@ let filteredAbstracts = [];
 async function loadAbstractFolder(strand) {
 
     currentStrand = strand;
+    currentPage = 1;
 
     researchList.innerHTML = `
 
@@ -53,7 +54,7 @@ async function loadAbstractFolder(strand) {
 
             const data = doc.data();
 
-            if ((data.strand || "").toUpperCase() === strand.toUpperCase()) {
+            if ((data.strand || "").trim().toUpperCase() === strand.trim().toUpperCase()) {
 
                 allAbstracts.push(Object.assign({ id: doc.id }, data));
 
@@ -66,6 +67,11 @@ async function loadAbstractFolder(strand) {
         renderAbstractCards(allAbstracts);
 
         updateStatistics(allAbstracts);
+
+        const countEl = document.getElementById(strand.toLowerCase() + "Count");
+        if (countEl) {
+            countEl.textContent = allAbstracts.length + " Abstract Files";
+        }
 
     } catch (error) {
 
@@ -282,7 +288,7 @@ async function loadAbstractCounts() {
 
         const data = doc.data();
 
-        const strand = (data.strand || "").toUpperCase();
+        const strand = (data.strand || "").trim().toUpperCase();
 
         if (counts[strand] !== undefined) {
 

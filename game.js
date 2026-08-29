@@ -1387,9 +1387,17 @@ async function loadFolderCounts() {
         `${counts.GAS} Research Papers`;
 }
 
-loadFolderCounts().catch(error => {
-    console.error("Folder counts failed:", error);
-});
+const isArchivePage = window.location.pathname.toLowerCase().includes("archive.html");
+
+if (isArchivePage) {
+
+    loadFolderCounts().catch(error => {
+
+        console.error("Folder counts failed:", error);
+
+    });
+
+}
 
 // ==========================
 // LOAD RESEARCH PER STRAND
@@ -2049,6 +2057,10 @@ async function loadActivityLogs() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+
+    const isArchivePage = window.location.pathname.toLowerCase().includes("archive.html");
+
+    if (!isArchivePage) return;
 
     loadFolderCounts();
 

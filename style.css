@@ -292,6 +292,9 @@ body{
 
 
 .header{
+    position:sticky;
+    top:0;
+    z-index:50;
     display:flex;
     align-items:center;
     background: var(--header-bg);
@@ -524,6 +527,17 @@ transform:scale(.97);
     gap:20px;
 }
 
+.upload-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    gap:25px;
+    align-items:start;
+}
+
+.upload-grid .upload-box + .upload-box{
+    margin-top:0;
+}
+
 .upload-box{
     background: var(--surface);
     padding:28px;
@@ -750,13 +764,14 @@ transform:scale(.97);
 
 .footer{
     margin-top:40px;
-    color: var(--muted);
-    font-size:14px;
-    padding:26px 24px;
-    background: var(--footer-bg);
-    border:1px solid var(--footer-border);
-    border-radius:18px;
-    box-shadow:0 15px 35px var(--shadow);
+    color:var(--muted);
+    font-size:13px;
+    padding:18px 24px;
+    text-align:center;
+    background:transparent;
+    border:none;
+    border-radius:0;
+    box-shadow:none;
 }
 
 .footer hr{
@@ -782,6 +797,21 @@ transform:scale(.97);
     gap:20px;
     flex-wrap:wrap;
     text-align:center;
+}
+
+.footer.footer-plain{
+    background:transparent;
+    border:none;
+    border-radius:0;
+    box-shadow:none;
+    margin-top:30px;
+    padding:18px 24px;
+    text-align:center;
+}
+
+.footer.footer-plain p{
+    color:var(--muted);
+    font-size:13px;
 }
 
 .footer .footer-brand{
@@ -2850,6 +2880,11 @@ transform:translateY(0);
 }
 
 .contact-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100%;
     background:var(--surface);
     border-radius:18px;
     padding:25px;
@@ -2932,6 +2967,11 @@ transform:translateY(0);
 }
 
 .contact-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100%;
     background: var(--surface);
     border-radius:18px;
     padding:28px;

@@ -6,8 +6,20 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Student Archive Management System</title>
-
     <link rel="stylesheet" href="style.css">
+
+    <script>
+        function guardLogin() {
+            const __role = sessionStorage.getItem("role");
+            if (__role === "teacher") {
+                window.location.replace("dashboard.html");
+            } else if (__role === "student") {
+                window.location.replace("archive.html");
+            }
+        }
+        window.addEventListener("pageshow", guardLogin);
+    </script>
+
 </head>
 <body>
 
@@ -72,18 +84,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
     </div>
 
-    <footer class="footer">
-        <hr>
-        <div class="footer-inner">
-            <p>
-                Student Archive Management System<br>
-                Young Achievers' School of Caloocan, Inc.<br>
-                School Year 2026–2027
-            </p>
-        </div>
-    </footer>
-
 </div>
+
+<footer class="footer footer-plain">
+    <p>© 2026 Student Archive Management System. All Rights Reserved. Young Achievers' School of Caloocan, Inc.</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="game.js"></script>
