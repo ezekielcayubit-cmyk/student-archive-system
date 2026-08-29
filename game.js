@@ -1387,7 +1387,8 @@ async function loadFolderCounts() {
         `${counts.GAS} Research Papers`;
 }
 
-const isArchivePage = window.location.pathname.toLowerCase().includes("archive.html");
+const researchTitleEl = document.getElementById("researchTitle");
+const isArchivePage = researchTitleEl && researchTitleEl.textContent.includes("Research Archive");
 
 if (isArchivePage) {
 
@@ -2058,7 +2059,8 @@ async function loadActivityLogs() {
 
 window.addEventListener("DOMContentLoaded", () => {
 
-    const isArchivePage = window.location.pathname.toLowerCase().includes("archive.html");
+    const researchTitleEl = document.getElementById("researchTitle");
+    const isArchivePage = researchTitleEl && researchTitleEl.textContent.includes("Research Archive");
 
     if (!isArchivePage) return;
 
