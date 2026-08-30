@@ -91,28 +91,14 @@ if (loginBtn) {
 
 onAuthStateChanged(auth, (user) => {
 
-    const currentRole = sessionStorage.getItem("role");
-
-    if (user) {
-
-        // Never promote an explicit student session to teacher, even if a
-        // teacher's Firebase auth happens to be persisted in this browser.
-        if (currentRole !== "student") {
-            sessionStorage.setItem("role", "teacher");
-            sessionStorage.setItem("teacherEmail", user.email || "Teacher");
-        }
-        window.dispatchEvent(new Event('session:update'));
-
-    } else {
-
-        // Don't wipe a student session just because no Firebase user is present.
-        if (currentRole !== "student") {
-            sessionStorage.removeItem("role");
-            sessionStorage.removeItem("teacherEmail");
-        }
-        window.dispatchEvent(new Event('session:update'));
-
-    }
+    // Role is owned ONLY by an explicit action:
+    //   - teacher login  -> sessionStorage "teacher"
+    //   - "Continue as Student" -> sessionStorage "student"
+    // Never infer role from Firebase auth. A teacher's login is persisted by
+    // Firebase in the browser, so inferring "authenticated == teacher" would
+    // wrongly promote a student visitor (or anyone just browsing) to teacher
+    // and reveal Activity Logs / Trash Bin.
+    window.dispatchEvent(new Event('session:update'));
 
 });
 
