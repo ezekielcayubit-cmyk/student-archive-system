@@ -13,23 +13,31 @@ import {
 
 const loginBtn = document.getElementById("loginBtn");
 
+// Firebase Authentication only accepts an email format internally, so a
+// teacher's plain username is converted to <username>@yasci.local behind
+// the scenes. Teacher accounts in the Firebase Console must be created
+// using this same "<username>@yasci.local" pattern as their email.
+const USERNAME_DOMAIN = "@yasci.local";
+
 if (loginBtn) {
 
     loginBtn.addEventListener("click", async () => {
 
-        const email = document.getElementById("email").value.trim();
+        const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value;
 
-        if (!email || !password) {
+        if (!username || !password) {
 
             Swal.fire({
                 icon: "warning",
                 title: "Missing Information",
-                text: "Please enter your email and password."
+                text: "Please enter your username and password."
             });
 
             return;
         }
+
+        const email = username.includes("@") ? username : username + USERNAME_DOMAIN;
 
         try {
 
