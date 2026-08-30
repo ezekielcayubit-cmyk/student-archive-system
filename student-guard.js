@@ -10,7 +10,7 @@ function hideStudentOnlyLinks() {
 function protectTeacherOnlyPages() {
     if (isTeacher) return;
     const page = location.pathname.split("/").pop();
-    if (page === "trash.html") {
+    if (page === "trash.html" || page === "activity-logs.html") {
         window.location.href = "archive.html";
     }
 }
