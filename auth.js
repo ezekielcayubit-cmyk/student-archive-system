@@ -91,16 +91,25 @@ if (loginBtn) {
 
 onAuthStateChanged(auth, (user) => {
 
+    const currentRole = sessionStorage.getItem("role");
+
     if (user) {
 
-        sessionStorage.setItem("role", "teacher");
-        sessionStorage.setItem("teacherEmail", user.email || "Teacher");
+        // Never promote an explicit student session to teacher, even if a
+        // teacher's Firebase auth happens to be persisted in this browser.
+        if (currentRole !== "student") {
+            sessionStorage.setItem("role", "teacher");
+            sessionStorage.setItem("teacherEmail", user.email || "Teacher");
+        }
         window.dispatchEvent(new Event('session:update'));
 
     } else {
 
-        sessionStorage.removeItem("role");
-        sessionStorage.removeItem("teacherEmail");
+        // Don't wipe a student session just because no Firebase user is present.
+        if (currentRole !== "student") {
+            sessionStorage.removeItem("role");
+            sessionStorage.removeItem("teacherEmail");
+        }
         window.dispatchEvent(new Event('session:update'));
 
     }
