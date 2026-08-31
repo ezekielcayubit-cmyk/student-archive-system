@@ -596,7 +596,7 @@ if (emailBox && roleBox) {
     if (role === "teacher") {
 
         emailBox.textContent =
-            sessionStorage.getItem("teacherEmail") || "Teacher";
+            sessionStorage.getItem("teacherUsername") || "Teacher";
 
         roleBox.innerHTML = `
         <span class="online-status"></span>

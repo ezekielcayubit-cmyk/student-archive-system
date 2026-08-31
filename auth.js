@@ -45,6 +45,7 @@ if (loginBtn) {
 
     sessionStorage.setItem("role", "teacher");
     sessionStorage.setItem("teacherEmail", userCredential.user.email);
+    sessionStorage.setItem("teacherUsername", username);
     await addDoc(collection(db, "activityLogs"), {
     teacher: userCredential.user.email,
     action: "Login",

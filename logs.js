@@ -134,7 +134,7 @@ function renderLogs() {
 
             <td data-label="Date">${formatLogDate(log.date)}</td>
 
-            <td data-label="Teacher">${log.teacher || "-"}</td>
+            <td data-label="Teacher">${(log.teacher || "-").split("@")[0]}</td>
 
             <td data-label="Action">
 

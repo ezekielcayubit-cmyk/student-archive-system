@@ -1898,27 +1898,27 @@ function updateUserHeader() {
     if (!emailBox || !roleBox) return;
 
     const role = sessionStorage.getItem("role");
-    const teacherEmail = sessionStorage.getItem("teacherEmail") || "Teacher";
+    const teacherUsername = sessionStorage.getItem("teacherUsername") || "Teacher";
 
     if (role === "teacher") {
-        emailBox.textContent = teacherEmail;
+        emailBox.textContent = teacherUsername;
         roleBox.innerHTML = `
-<span class="online-status"></span>
-Teacher's Mode
-`;
+        <span class="online-status"></span>
+        Teacher's Mode
+        `;
     } else {
-        emailBox.textContent = "Guest";
+        emailBox.textContent = "Student";
         roleBox.innerHTML = `
-<span class="online-status"></span>
-View Only Mode
-`;
+        <span class="online-status"></span>
+        View Only Mode
+        `;
     }
 }
 
 updateUserHeader();
 window.addEventListener('session:update', updateUserHeader);
 window.addEventListener('storage', (event) => {
-    if (event.key === 'role' || event.key === 'teacherEmail') {
+    if (event.key === 'role' || event.key === 'teacherEmail' || event.key === 'teacherUsername') {
         updateUserHeader();
     }
 });
