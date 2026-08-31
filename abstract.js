@@ -557,14 +557,14 @@ async function deleteAbstract(id) {
             title: "Moved to Trash!",
             text: "Abstract moved to trash successfully.",
             timer: 1800,
-            showConfirmButton: false
-        });
+             showConfirmButton: false
+         });
 
-        location.reload();
+         loadAbstractFolder(currentStrand);
 
-    } catch (error) {
+     } catch (error) {
 
-        console.error("Delete abstract error:", error);
+         console.error("Delete abstract error:", error);
 
         Swal.fire({
 

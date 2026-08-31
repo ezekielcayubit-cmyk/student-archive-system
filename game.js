@@ -669,10 +669,12 @@ if (abstractUploadForm) {
                 console.warn('Could not dispatch upload:success', err);
             }
 
-            await Swal.fire({
+            Swal.fire({
                 icon: "success",
                 title: "Abstract Uploaded",
-                text: "The abstract file was uploaded successfully."
+                text: "The abstract file was uploaded successfully.",
+                timer: 1500,
+                showConfirmButton: false
             });
 
             abstractUploadForm.reset();
@@ -688,6 +690,10 @@ if (abstractUploadForm) {
                 abstractBtn.disabled = false;
                 abstractBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Abstract';
             }
+
+            setTimeout(() => {
+                window.location.href = "abstract.html";
+            }, 1500);
 
         } catch (error) {
             console.error(error);
@@ -983,20 +989,28 @@ async function deleteResearch(id) {
             title: "Moved to Trash!",
             text: "Research moved to trash successfully.",
             timer: 1800,
-            showConfirmButton: false
-        });
+             showConfirmButton: false
+         });
 
-        location.reload();
+         if (activeStrand) {
 
-    } catch (error) {
+             window.loadFolder(activeStrand);
 
-        console.error(error);
+         } else {
 
-        Swal.fire({
-            icon: "error",
-            title: "Delete Failed",
-            text: "Unable to move research to trash."
-        });
+             location.reload();
+
+         }
+
+     } catch (error) {
+
+         console.error(error);
+
+         Swal.fire({
+             icon: "error",
+             title: "Delete Failed",
+             text: "Unable to move research to trash."
+         });
 
     }
 
