@@ -154,13 +154,19 @@ body{
     text-decoration:none;
 
     font-weight:bold;
+    transition: color .2s ease, transform .15s ease;
 
 }
 
 .back:hover{
 
     text-decoration:underline;
+    transform: translateX(3px);
 
+}
+
+.back:active{
+    transform: translateX(1px);
 }
 
 @media (max-width:480px){
